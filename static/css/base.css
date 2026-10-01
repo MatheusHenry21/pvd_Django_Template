@@ -1,0 +1,474 @@
+/* ========================================
+   RESET
+======================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f8fafc;
+    color: #111827;
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+
+/* ========================================
+   ESTRUTURA PRINCIPAL
+======================================== */
+
+.app {
+    display: flex;
+    min-height: 100vh;
+}
+
+
+/* ========================================
+   SIDEBAR
+======================================== */
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 220px;
+    height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+
+    background-color: #0f172a;
+    color: #cbd5e1;
+
+    z-index: 100;
+}
+
+
+/* ========================================
+   CABEÇALHO DA SIDEBAR
+======================================== */
+
+.sidebar-header {
+    height: 72px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 20px;
+
+    border-bottom: 1px solid #1e293b;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    color: #ffffff;
+    font-size: 17px;
+    font-weight: 600;
+}
+
+.logo-icon {
+    width: 26px;
+    height: 26px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 6px;
+
+    background-color: #2563eb;
+    color: #ffffff;
+
+    font-size: 13px;
+}
+
+.sidebar-toggle {
+    border: none;
+    background: transparent;
+
+    color: #94a3b8;
+
+    font-size: 20px;
+}
+
+.sidebar-toggle:hover {
+    color: #ffffff;
+}
+
+
+/* ========================================
+   NAVEGAÇÃO
+======================================== */
+
+/* Ocultar a barra de rolagem em navegadores baseados em WebKit (Chrome, Safari, Edge) */
+.sidebar, .sidebar-nav {
+  -ms-overflow-style: none;  /* IE e Edge antigo */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.sidebar::-webkit-scrollbar,
+.sidebar-nav::-webkit-scrollbar {
+  display: none; /* Chrome, Safari e Opera */
+}
+
+.sidebar-nav {
+    flex: 1;
+
+    padding: 16px 10px;
+
+    overflow-y: auto;
+}
+
+.nav-item {
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 0 14px;
+
+    margin-bottom: 4px;
+
+    border-radius: 7px;
+
+    color: #94a3b8;
+
+    font-size: 14px;
+
+    transition:
+        background-color 0.15s ease,
+        color 0.15s ease;
+}
+
+.nav-item:hover {
+    background-color: #172554;
+    color: #ffffff;
+}
+
+.nav-icon {
+    width: 20px;
+
+    display: flex;
+    justify-content: center;
+
+    font-size: 16px;
+}
+
+.nav-text {
+    white-space: nowrap;
+}
+
+
+/* Página ativa */
+
+.nav-item.active {
+    background-color: #2563eb;
+    color: #ffffff;
+}
+
+
+/* ========================================
+   RODAPÉ DA SIDEBAR
+======================================== */
+
+.sidebar-footer {
+    padding: 16px 14px;
+
+    border-top: 1px solid #1e293b;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 18px;
+}
+
+.user-avatar {
+    width: 34px;
+    height: 34px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background-color: #2563eb;
+    color: #ffffff;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.user-details {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 2px;
+}
+
+.user-details strong {
+    overflow: hidden;
+
+    color: #ffffff;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.user-details span {
+    color: #64748b;
+
+    font-size: 11px;
+}
+
+.logout {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 7px 4px;
+
+    color: #94a3b8;
+
+    font-size: 13px;
+}
+
+.logout:hover {
+    color: #ffffff;
+}
+
+
+/* ========================================
+   CONTEÚDO PRINCIPAL
+======================================== */
+
+.main-content {
+    width: calc(100% - 220px);
+    min-height: 100vh;
+
+    margin-left: 220px;
+}
+
+
+/* ========================================
+   TOPBAR
+======================================== */
+
+.topbar {
+    height: 72px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 28px;
+
+    background-color: #ffffff;
+
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.topbar-left {
+    display: flex;
+    align-items: center;
+}
+
+.topbar-right {
+    display: flex;
+    align-items: center;
+
+    gap: 18px;
+}
+
+.date-time {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+
+    gap: 2px;
+
+    color: #64748b;
+
+    font-size: 11px;
+}
+
+.date-time span:first-child {
+    color: #334155;
+    font-weight: 500;
+}
+
+.notification-button {
+    position: relative;
+
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+    background: transparent;
+
+    color: #64748b;
+
+    font-size: 18px;
+}
+
+.notification-button:hover {
+    color: #2563eb;
+}
+
+.notification-dot {
+    position: absolute;
+
+    top: 6px;
+    right: 6px;
+
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+
+    background-color: #ef4444;
+}
+
+
+/* ========================================
+   ÁREA DA PÁGINA
+======================================== */
+
+.page-content {
+    padding: 24px 28px;
+}
+
+.page-header {
+    min-height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 20px;
+}
+
+.page-header h1 {
+    color: #0f172a;
+
+    font-size: 20px;
+    font-weight: 500;
+}
+
+
+/* ========================================
+   CONTEÚDO
+======================================== */
+
+.content {
+    width: 100%;
+}
+
+
+/* ========================================
+   RESPONSIVIDADE
+======================================== */
+
+@media (max-width: 900px) {
+
+    .sidebar {
+        width: 72px;
+    }
+
+    .main-content {
+        width: calc(100% - 72px);
+        margin-left: 72px;
+    }
+
+    .logo-text,
+    .nav-text,
+    .user-details,
+    .logout span:last-child {
+        display: none;
+    }
+
+    .sidebar-header {
+        justify-content: center;
+        padding: 0;
+    }
+
+    .sidebar-toggle {
+        display: none;
+    }
+
+    .nav-item {
+        justify-content: center;
+        padding: 0;
+    }
+
+    .user-info {
+        justify-content: center;
+    }
+
+    .logout {
+        justify-content: center;
+    }
+}
+
+
+@media (max-width: 600px) {
+
+    .topbar {
+        padding: 0 16px;
+    }
+
+    .page-content {
+        padding: 20px 16px;
+    }
+
+    .date-time {
+        display: none;
+    }
+}

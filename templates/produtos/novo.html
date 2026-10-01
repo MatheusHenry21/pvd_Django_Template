@@ -1,0 +1,202 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+
+{% block title %}
+    Novo Produto | PVDPro
+{% endblock %}
+
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/produto-form.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="modal-overlay">
+
+    <div class="modal">
+
+
+        <!-- CABEÇALHO -->
+
+        <div class="modal-header">
+
+            <h2>
+                Novo produto
+            </h2>
+
+            <a
+                href="{% url 'produtos:lista' %}"
+                class="modal-close"
+                aria-label="Fechar"
+            >
+                ×
+            </a>
+
+        </div>
+
+
+        <!-- FORMULÁRIO -->
+
+        <form
+            method="post"
+            class="produto-form"
+        >
+
+            {% csrf_token %}
+
+            <div class="modal-body">
+
+            {% if form.non_field_errors %}
+
+                <div class="form-errors">
+
+                    {{ form.non_field_errors }}
+
+                </div>
+
+            {% endif %}
+
+
+            <!-- CÓDIGO + CATEGORIA -->
+
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label for="{{ form.codigo.id_for_label }}">
+                        Código
+                    </label>
+
+                    {{ form.codigo }}
+
+                    {% if form.codigo.errors %}
+                        <div class="field-error">
+                            {{ form.codigo.errors }}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="{{ form.categoria.id_for_label }}">
+                        Categoria
+                    </label>
+
+                    {{ form.categoria }}
+
+                    {% if form.categoria.errors %}
+                        <div class="field-error">
+                            {{ form.categoria.errors }}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- NOME -->
+
+            <div class="form-group">
+
+                <label for="{{ form.nome.id_for_label }}">
+                    Nome do produto
+                </label>
+
+                {{ form.nome }}
+
+                {% if form.nome.errors %}
+                    <div class="field-error">
+                        {{ form.nome.errors }}
+                    </div>
+                {% endif %}
+
+            </div>
+
+
+            <!-- PREÇO + ESTOQUE -->
+
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label for="{{ form.preco.id_for_label }}">
+                        Preço (R$)
+                    </label>
+
+                    {{ form.preco }}
+
+                    {% if form.preco.errors %}
+                        <div class="field-error">
+                            {{ form.preco.errors }}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="{{ form.estoque.id_for_label }}">
+                        Estoque
+                    </label>
+
+                    {{ form.estoque }}
+
+                    {% if form.estoque.errors %}
+                        <div class="field-error">
+                            {{ form.estoque.errors }}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- ATIVO -->
+
+            <div class="form-switch">
+
+                {{ form.ativo }}
+
+                <label for="{{ form.ativo.id_for_label }}">
+                    Produto ativo
+                </label>
+
+            </div>
+
+            </div>
+
+            <!-- BOTÕES -->
+
+            <div class="modal-footer">
+
+                <a
+                    href="{% url 'produtos:lista' %}"
+                    class="btn-cancelar"
+                >
+                    Cancelar
+                </a>
+
+                <button
+                    type="submit"
+                    class="btn-salvar"
+                >
+                    Cadastrar produto
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

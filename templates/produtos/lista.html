@@ -1,0 +1,382 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}
+    Produtos | PVDPro
+{% endblock %}
+
+
+{% block page_title %}
+    Produtos
+{% endblock %}
+
+
+{% block page_actions %}
+    <a href="{% url 'produtos:novo' %}" class="btn-primary">
+        <span class="btn-icon">+</span>
+        Novo Produto
+    </a>
+{% endblock %}
+
+
+{% block extra_css %}
+
+    <link rel="stylesheet" href="{% static 'css/produtos.css' %}">
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="produtos-container">
+
+
+    <!-- FILTROS -->
+
+    <form
+        method="get"
+        class="produtos-filtros"
+    >
+
+        <!-- Busca -->
+
+        <div class="busca-container">
+
+            <span class="busca-icon">
+                ⌕
+            </span>
+
+            <input
+                type="search"
+                name="busca"
+                value="{{ busca }}"
+                placeholder="Buscar produto..."
+                class="busca-input"
+            >
+
+        </div>
+
+
+        <!-- Categorias -->
+
+        <div class="categorias">
+
+            <a
+                href="?{% if busca %}busca={{ busca|urlencode }}{% endif %}"
+                class="categoria-btn {% if not categoria_id %}active{% endif %}"
+            >
+                Todos
+            </a>
+
+
+            {% for categoria in categorias %}
+
+                <a
+                    href="?categoria={{ categoria.id }}{% if busca %}&busca={{ busca|urlencode }}{% endif %}"
+                    class="categoria-btn
+                    {% if categoria_id == categoria.id|stringformat:'s' %}
+                        active
+                    {% endif %}"
+                >
+                    {{ categoria.nome }}
+                </a>
+
+            {% endfor %}
+
+        </div>
+
+
+        <button
+            type="submit"
+            class="btn-filtrar"
+        >
+            Filtrar
+        </button>
+
+    </form>
+
+
+    <!-- TABELA -->
+
+    <div class="produtos-tabela-container">
+
+        <table class="produtos-tabela">
+
+            <thead>
+
+                <tr>
+
+                    <th>CÓDIGO</th>
+
+                    <th>NOME</th>
+
+                    <th>CATEGORIA</th>
+
+                    <th>PREÇO</th>
+
+                    <th>ESTOQUE</th>
+
+                    <th>STATUS</th>
+
+                    <th>AÇÕES</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for produto in produtos %}
+
+                    <tr>
+
+                        <!-- Código -->
+
+                        <td>
+                            <span class="codigo">
+                                {{ produto.codigo }}
+                            </span>
+                        </td>
+
+
+                        <!-- Nome -->
+
+                        <td>
+
+                            <span class="produto-nome">
+                                {{ produto.nome }}
+                            </span>
+
+                        </td>
+
+
+                        <!-- Categoria -->
+
+                        <td>
+
+                            <span class="categoria-badge">
+                                {{ produto.categoria.nome }}
+                            </span>
+
+                        </td>
+
+
+                        <!-- Preço -->
+
+                        <td>
+
+                            <strong class="preco">
+                                R$ {{ produto.preco|floatformat:2 }}
+                            </strong>
+
+                        </td>
+
+
+                        <!-- Estoque -->
+
+                        <td>
+
+                            {% if produto.estoque <= 0 %}
+
+                                <span class="estoque estoque-zero">
+                                    {{ produto.estoque|floatformat:0 }}
+                                </span>
+
+                                <span class="estoque-alerta">
+                                    Sem estoque
+                                </span>
+
+                            {% elif produto.estoque <= 5 %}
+
+                                <span class="estoque estoque-baixo">
+                                    {{ produto.estoque|floatformat:0 }}
+                                </span>
+
+                                <span class="estoque-alerta">
+                                    Baixo
+                                </span>
+
+                            {% else %}
+
+                                <span class="estoque">
+                                    {{ produto.estoque|floatformat:0 }}
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- Status -->
+
+                        <td>
+
+                            {% if produto.ativo %}
+
+                                <span class="status status-ativo">
+                                    Ativo
+                                </span>
+
+                            {% else %}
+
+                                <span class="status status-inativo">
+                                    Inativo
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- Ações -->
+
+                        <td>
+
+                            <div class="acoes">
+
+                                <a
+                                    href="{% url 'produtos:editar' produto.pk %}"
+                                    class="acao-editar"
+                                >
+                                    Editar
+                                </a>
+
+                                <span class="acao-separador">
+                                    |
+                                </span>
+
+                                <a
+                                    href="{% url 'produtos:excluir' produto.pk %}"
+                                    class="acao-excluir"
+                                >
+                                    Excluir
+                                </a>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                {% empty %}
+
+                    <tr>
+
+                        <td
+                            colspan="7"
+                            class="tabela-vazia"
+                        >
+
+                            Nenhum produto encontrado.
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+
+        <!-- RODAPÉ DA TABELA -->
+
+        <div class="tabela-footer">
+
+
+            <!-- Quantidade -->
+
+            <span class="quantidade-produtos">
+
+                {% if page_obj.paginator.count == 1 %}
+
+                    1 produto encontrado
+
+                {% else %}
+
+                    {{ page_obj.paginator.count }}
+                    produtos encontrados
+
+                {% endif %}
+
+            </span>
+
+
+            <!-- Paginação -->
+
+            {% if page_obj.paginator.num_pages > 1 %}
+
+                <div class="paginacao">
+
+                    {% if page_obj.has_previous %}
+
+                        <a
+                            href="?page={{ page_obj.previous_page_number }}{% if busca %}&busca={{ busca|urlencode }}{% endif %}{% if categoria_id %}&categoria={{ categoria_id }}{% endif %}"
+                            class="pagina-btn"
+                        >
+                            ← Anterior
+                        </a>
+
+                    {% else %}
+
+                        <span class="pagina-btn disabled">
+                            ← Anterior
+                        </span>
+
+                    {% endif %}
+
+
+                    {% for numero in page_obj.paginator.page_range %}
+
+                        {% if numero == page_obj.number %}
+
+                            <span class="pagina-btn pagina-atual">
+                                {{ numero }}
+                            </span>
+
+                        {% else %}
+
+                            <a
+                                href="?page={{ numero }}{% if busca %}&busca={{ busca|urlencode }}{% endif %}{% if categoria_id %}&categoria={{ categoria_id }}{% endif %}"
+                                class="pagina-btn"
+                            >
+                                {{ numero }}
+                            </a>
+
+                        {% endif %}
+
+                    {% endfor %}
+
+
+                    {% if page_obj.has_next %}
+
+                        <a
+                            href="?page={{ page_obj.next_page_number }}{% if busca %}&busca={{ busca|urlencode }}{% endif %}{% if categoria_id %}&categoria={{ categoria_id }}{% endif %}"
+                            class="pagina-btn"
+                        >
+                            Próximo →
+                        </a>
+
+                    {% else %}
+
+                        <span class="pagina-btn disabled">
+                            Próximo →
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+            {% endif %}
+
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

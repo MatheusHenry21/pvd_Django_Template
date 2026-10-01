@@ -1,0 +1,156 @@
+.delete-modal-overlay {
+    position: fixed;
+
+    inset: 0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(0, 0, 0, 0.35);
+
+    backdrop-filter: blur(5px);
+
+    z-index: 1000;
+}
+
+
+.delete-modal {
+    width: 323px;
+
+    padding: 20px;
+
+    box-sizing: border-box;
+
+    background: #ffffff;
+
+    border-radius: 14px;
+
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.20);
+
+    text-align: center;
+}
+
+
+/* ÍCONE */
+
+.delete-icon {
+    width: 42px;
+    height: 42px;
+
+    margin: 0 auto 16px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #fff0f1;
+
+    color: #ff3038;
+
+    font-size: 18px;
+}
+
+
+/* TÍTULO */
+
+.delete-modal h2 {
+    margin: 0 0 7px;
+
+    color: #26354d;
+
+    font-size: 16px;
+
+    font-weight: 500;
+}
+
+
+/* TEXTO */
+
+.delete-modal p {
+    margin: 0;
+
+    color: #667085;
+
+    font-size: 12px;
+
+    line-height: 1.5;
+}
+
+.delete-modal p strong {
+    color: #667085;
+
+    font-weight: 700;
+}
+
+
+/* BOTÕES */
+
+.delete-modal-actions {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 10px;
+
+    margin-top: 21px;
+}
+
+
+/* CANCELAR */
+
+.delete-btn-cancelar {
+    height: 36px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box;
+
+    border: 1px solid #d9dee7;
+
+    border-radius: 7px;
+
+    background: #ffffff;
+
+    color: #344054;
+
+    font-size: 12px;
+
+    text-decoration: none;
+}
+
+.delete-btn-cancelar:hover {
+    background: #f8f9fb;
+}
+
+
+/* EXCLUIR */
+
+.delete-btn-excluir {
+    height: 36px;
+
+    border: none;
+
+    border-radius: 7px;
+
+    background: #ff3038;
+
+    color: #ffffff;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.delete-btn-excluir:hover {
+    background: #e5252d;
+}

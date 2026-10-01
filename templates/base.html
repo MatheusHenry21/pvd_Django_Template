@@ -1,0 +1,192 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {% block title %}PVDPro{% endblock %}
+    </title>
+
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+
+    <div class="app">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+
+            <!-- Logo -->
+            <div class="sidebar-header">
+                <a href="/" class="logo">
+                    <span class="logo-icon">▣</span>
+                    <span class="logo-text">PVDPro</span>
+                </a>
+
+                <button class="sidebar-toggle" type="button">
+                    «
+                </button>
+            </div>
+
+
+            <!-- Navegação -->
+            <nav class="sidebar-nav">
+
+                <a href="/" class="nav-item">
+                    <span class="nav-icon">⌂</span>
+                    <span class="nav-text">Dashboard</span>
+                </a>
+
+                <a href="#" class="nav-item">
+                    <span class="nav-icon">🛒</span>
+                    <span class="nav-text">Vendas</span>
+                </a>
+
+                <a href="#" class="nav-item">
+                    <span class="nav-icon">□</span>
+                    <span class="nav-text">Produtos</span>
+                </a>
+
+                <a href="#" class="nav-item">
+                    <span class="nav-icon">♙</span>
+                    <span class="nav-text">Clientes</span>
+                </a>
+
+                <a href="#" class="nav-item">
+                    <span class="nav-icon">▣</span>
+                    <span class="nav-text">Caixa</span>
+                </a>
+
+                <a href="#" class="nav-item">
+                    <span class="nav-icon">▤</span>
+                    <span class="nav-text">Crediário</span>
+                </a>
+
+                <a href="#" class="nav-item">
+                    <span class="nav-icon">▥</span>
+                    <span class="nav-text">Relatórios</span>
+                </a>
+
+                <a href="#" class="nav-item">
+                    <span class="nav-icon">♙</span>
+                    <span class="nav-text">Usuários</span>
+                </a>
+
+                <a href="#" class="nav-item">
+                    <span class="nav-icon">⚙</span>
+                    <span class="nav-text">Configurações</span>
+                </a>
+
+            </nav>
+
+
+            <!-- Usuário -->
+            <div class="sidebar-footer">
+
+                <div class="user-info">
+
+                    <div class="user-avatar">
+                        {{ request.user.username|first|upper }}
+                    </div>
+
+                    <div class="user-details">
+                        <strong>
+                            {{ request.user.get_full_name|default:request.user.username }}
+                        </strong>
+
+                        <span>
+                            {{ request.user.cargo|default:"Usuário" }}
+                        </span>
+                    </div>
+
+                </div>
+
+                <a href="#" class="logout">
+                    <span>↪</span>
+                    <span>Sair</span>
+                </a>
+
+            </div>
+
+        </aside>
+
+
+        <!-- ÁREA PRINCIPAL -->
+        <main class="main-content">
+
+            <!-- HEADER -->
+            <header class="topbar">
+
+                <div class="topbar-left">
+
+                    {% block breadcrumb %}
+                    {% endblock %}
+
+                </div>
+
+
+                <div class="topbar-right">
+
+                    <div class="date-time">
+                        <span>
+                            {% now "D, d \d\e M" %}
+                        </span>
+
+                        <span>
+                            {% now "H:i" %}
+                        </span>
+                    </div>
+
+                    <button class="notification-button" type="button">
+                        ♧
+                        <span class="notification-dot"></span>
+                    </button>
+
+                </div>
+
+            </header>
+
+
+            <!-- CONTEÚDO DA PÁGINA -->
+            <section class="page-content">
+
+                <div class="page-header">
+
+                    <h1>
+                        {% block page_title %}
+                        PVDPro
+                        {% endblock %}
+                    </h1>
+
+                    {% block page_actions %}
+                    {% endblock %}
+
+                </div>
+
+
+                <div class="content">
+
+                    {% block content %}
+                    {% endblock %}
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    {% block extra_js %}
+    {% endblock %}
+
+</body>
+</html>
