@@ -1,0 +1,283 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}
+    Caixa | PVDPro
+{% endblock %}
+
+
+{% block page_title %}
+    Caixa
+{% endblock %}
+
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/caixa.css' %}">
+
+
+<div class="caixa-container">
+
+    <!-- ========================================
+         ABAS
+    ========================================= -->
+
+    <nav class="caixa-tabs">
+
+        <a
+            href="{% url 'caixa:operacao' %}"
+            class="caixa-tab active"
+        >
+            Operação Atual
+        </a>
+
+
+        <a
+            href="{% url 'caixa:historico' %}"
+            class="caixa-tab"
+        >
+            Histórico
+        </a>
+
+    </nav>
+
+
+    <!-- ========================================
+         OPERAÇÃO ATUAL
+    ========================================= -->
+
+    <section class="caixa-operacao">
+
+        <div class="caixa-card">
+
+            <div class="caixa-info">
+
+                <!-- Ícone -->
+
+                <div class="caixa-icon">
+                    ▣
+                </div>
+
+
+                <!-- Informações -->
+
+                <div class="caixa-details">
+
+                    {% if caixa %}
+
+                        {% if caixa.status == 'ABERTO' %}
+
+                            <!-- Caixa aberto -->
+
+                            <div class="caixa-title">
+
+                                <h2>
+                                    Caixa Aberto
+                                </h2>
+
+
+                                <span class="caixa-status caixa-status-ativo">
+                                    Ativo
+                                </span>
+
+                            </div>
+
+
+                            <p>
+                                Aberto em
+                                {{ caixa.data_abertura|date:"d/m/Y \à\s H:i" }}
+                                por
+                                {{ caixa.usuario_abertura.get_full_name|default:caixa.usuario_abertura.username }}
+                            </p>
+
+
+                        {% else %}
+
+                            <!-- Caixa fechado -->
+
+                            <div class="caixa-title">
+
+                                <h2>
+                                    Caixa Fechado
+                                </h2>
+
+
+                                <span class="caixa-status caixa-status-inativo">
+                                    Inativo
+                                </span>
+
+                            </div>
+
+
+                            <p>
+                                Último fechamento:
+
+                                {% if caixa.data_fechamento %}
+
+                                    {{ caixa.data_fechamento|date:"d/m/Y \à\s H:i" }}
+
+                                    {% if caixa.usuario_fechamento %}
+
+                                        por
+                                        {{ caixa.usuario_fechamento.get_full_name|default:caixa.usuario_fechamento.username }}
+
+                                    {% endif %}
+
+                                {% else %}
+
+                                    Ainda não fechado
+
+                                {% endif %}
+                            </p>
+
+                        {% endif %}
+
+
+                    {% else %}
+
+                        <!-- Nenhum caixa cadastrado -->
+
+                        <div class="caixa-title">
+
+                            <h2>
+                                Caixa Fechado
+                            </h2>
+
+
+                            <span class="caixa-status caixa-status-inativo">
+                                Inativo
+                            </span>
+
+                        </div>
+
+
+                        <p>
+                            Nenhum caixa foi aberto ainda.
+                        </p>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- Botão abrir caixa -->
+
+            {% if not caixa or caixa.status == 'FECHADO' %}
+
+                <a
+                    href="{% url 'caixa:abrir' %}"
+                    class="caixa-btn-primary"
+                >
+                    Abrir Caixa
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<!-- ========================================
+     MODAL — ABRIR CAIXA
+========================================= -->
+
+{% if modal_aberto %}
+
+    <div class="caixa-modal-overlay">
+
+        <div class="caixa-modal">
+
+            <!-- Cabeçalho -->
+
+            <div class="caixa-modal-header">
+
+                <div>
+
+                    <h2 class="caixa-modal-title">
+                        Abrir Caixa
+                    </h2>
+
+
+                    <p class="caixa-modal-description">
+                        Informe o valor inicial do caixa.
+                    </p>
+
+                </div>
+
+
+                <!-- Fechar modal -->
+
+                <a
+                    href="{% url 'caixa:operacao' %}"
+                    class="caixa-modal-close"
+                >
+                    &times;
+                </a>
+
+            </div>
+
+
+            <!-- Formulário -->
+
+            <form
+                method="post"
+                action="{% url 'caixa:abrir' %}"
+            >
+
+                {% csrf_token %}
+
+
+                <div class="caixa-form-group">
+
+                    {{ form.valor_inicial.label_tag }}
+
+                    {{ form.valor_inicial }}
+
+
+                    {% if form.valor_inicial.errors %}
+
+                        <div class="caixa-form-error">
+                            {{ form.valor_inicial.errors }}
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- Ações -->
+
+                <div class="caixa-modal-actions">
+
+                    <a
+                        href="{% url 'caixa:operacao' %}"
+                        class="caixa-btn-secondary"
+                    >
+                        Cancelar
+                    </a>
+
+
+                    <button
+                        type="submit"
+                        class="caixa-btn-primary"
+                    >
+                        Abrir Caixa
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+{% endif %}
+
+{% endblock %}

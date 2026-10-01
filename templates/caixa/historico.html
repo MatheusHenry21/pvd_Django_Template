@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}
+    Histórico | PVDPro
+{% endblock %}
+
+
+{% block page_title %}
+    Caixa
+{% endblock %}
+
+
+{% block content %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/caixa.css' %}"
+>
+
+
+<div class="caixa-container">
+
+    <nav class="caixa-tabs">
+
+        <a
+            href="{% url 'caixa:operacao' %}"
+            class="caixa-tab"
+        >
+            Operação Atual
+        </a>
+
+
+        <a
+            href="{% url 'caixa:historico' %}"
+            class="caixa-tab active"
+        >
+            Histórico
+        </a>
+
+    </nav>
+
+
+    <section class="historico-card">
+
+        <div class="historico-header">
+
+            <h2>
+                Histórico de Caixas
+            </h2>
+
+        </div>
+
+
+        {% if caixas %}
+
+            <table class="historico-table">
+
+                <thead>
+
+                    <tr>
+                        <th>Caixa</th>
+                        <th>Abertura</th>
+                        <th>Operador</th>
+                        <th>Valor inicial</th>
+                        <th>Status</th>
+                        <th>Fechamento</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for caixa in caixas %}
+
+                        <tr>
+
+                            <td>
+                                #{{ caixa.id }}
+                            </td>
+
+
+                            <td>
+                                {{ caixa.data_abertura|date:"d/m/Y H:i" }}
+                            </td>
+
+
+                            <td>
+                                {{ caixa.usuario_abertura.get_full_name|default:caixa.usuario_abertura.username }}
+                            </td>
+
+
+                            <td>
+                                R$ {{ caixa.valor_inicial|floatformat:2 }}
+                            </td>
+
+
+                            <td>
+
+                                {% if caixa.status == 'ABERTO' %}
+
+                                    <span class="status aberto">
+                                        Aberto
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="status fechado">
+                                        Fechado
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <td>
+
+                                {% if caixa.data_fechamento %}
+
+                                    {{ caixa.data_fechamento|date:"d/m/Y H:i" }}
+
+                                {% else %}
+
+                                    —
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+
+        {% else %}
+
+            <div class="historico-vazio">
+
+                <h3>
+                    Nenhum caixa encontrado
+                </h3>
+
+                <p>
+                    Ainda não existem caixas registrados.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </section>
+
+</div>
+
+{% endblock %}

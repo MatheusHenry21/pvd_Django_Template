@@ -1,0 +1,230 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+
+{% block title %}
+    Abrir Caixa | PVDPro
+{% endblock %}
+
+
+{% block page_title %}
+    Caixa
+{% endblock %}
+
+
+{% block content %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/caixa.css' %}"
+>
+
+
+<div class="caixa-container">
+
+    <!-- ========================================
+         ABAS
+    ========================================= -->
+
+    <nav class="caixa-tabs">
+
+        <a
+            href="{% url 'caixa:operacao' %}"
+            class="caixa-tab active"
+        >
+            Operação Atual
+        </a>
+
+
+        <a
+            href="{% url 'caixa:historico' %}"
+            class="caixa-tab"
+        >
+            Histórico
+        </a>
+
+    </nav>
+
+
+    <!-- ========================================
+         CONTEÚDO DA OPERAÇÃO
+    ========================================= -->
+
+    <section class="caixa-operacao">
+
+        <div class="caixa-card">
+
+            <div class="caixa-info">
+
+                <div class="caixa-icon">
+                    ▣
+                </div>
+
+
+                <div class="caixa-details">
+
+                    <div class="caixa-title">
+
+                        <h2>
+                            Caixa Fechado
+                        </h2>
+
+                        <span class="caixa-status caixa-status-inativo">
+                            Inativo
+                        </span>
+
+                    </div>
+
+
+                    <p>
+                        Nenhum caixa aberto no momento.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <a
+                href="{% url 'caixa:abrir' %}"
+                class="caixa-btn-primary"
+            >
+                Abrir Caixa
+            </a>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<!-- ========================================
+     MODAL
+========================================= -->
+
+<div class="caixa-modal-overlay">
+
+    <div class="caixa-modal">
+
+
+        <!-- Cabeçalho -->
+
+        <div class="caixa-modal-header">
+
+            <div>
+
+                <h2 class="caixa-modal-title">
+                    Abrir Caixa
+                </h2>
+
+            </div>
+
+
+            <a
+                href="{% url 'caixa:operacao' %}"
+                class="caixa-modal-close"
+            >
+                &times;
+            </a>
+
+        </div>
+
+
+        <!-- Formulário -->
+
+        <form
+            method="post"
+            action="{% url 'caixa:abrir' %}"
+        >
+
+            {% csrf_token %}
+
+
+            <!-- Responsável -->
+
+            <div class="caixa-form-group">
+
+                <label>
+                    Responsável
+                </label>
+
+
+                <input
+                    type="text"
+                    class="caixa-form-input"
+                    value="{{ responsavel.get_full_name|default:responsavel.username }}"
+                    readonly
+                >
+
+            </div>
+
+
+            <!-- Data e hora -->
+
+            <div class="caixa-form-group">
+
+                <label>
+                    Data e hora
+                </label>
+
+
+                <input
+                    type="text"
+                    class="caixa-form-input"
+                    value="{{ data_hora|date:'d/m/Y - H:i' }}"
+                    readonly
+                >
+
+            </div>
+
+
+            <!-- Valor inicial -->
+
+            <div class="caixa-form-group">
+
+                {{ form.valor_inicial.label_tag }}
+
+                {{ form.valor_inicial }}
+
+
+                {% if form.valor_inicial.errors %}
+
+                    <div class="caixa-form-error">
+                        {{ form.valor_inicial.errors }}
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- Botões -->
+
+            <div class="caixa-modal-actions">
+
+                <a
+                    href="{% url 'caixa:operacao' %}"
+                    class="caixa-btn-secondary"
+                >
+                    Cancelar
+                </a>
+
+
+                <button
+                    type="submit"
+                    class="caixa-btn-primary"
+                >
+                    Abrir Caixa
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,741 @@
+/* ========================================
+   CAIXA
+======================================== */
+
+.caixa-container {
+    width: 100%;
+}
+
+
+/* ========================================
+   NAVEGAÇÃO
+======================================== */
+
+.caixa-tabs {
+    display: flex;
+    align-items: center;
+    gap: 0;
+
+    width: fit-content;
+
+    margin-bottom: 18px;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+
+    background-color: #ffffff;
+
+    overflow: hidden;
+}
+
+.caixa-tab {
+    height: 36px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 15px;
+
+    border: none;
+
+    background-color: #ffffff;
+
+    color: #64748b;
+
+    font-size: 12px;
+    font-weight: 500;
+
+    text-decoration: none;
+
+    transition:
+        background-color 0.15s ease,
+        color 0.15s ease;
+}
+
+.caixa-tab:hover {
+    color: #2563eb;
+}
+
+.caixa-tab.active {
+    background-color: #2563eb;
+
+    color: #ffffff;
+}
+
+
+/* ========================================
+   OPERAÇÃO ATUAL
+======================================== */
+
+.caixa-operacao {
+    width: 100%;
+}
+
+
+/* ========================================
+   CARD DO CAIXA
+======================================== */
+
+.caixa-card {
+    min-height: 86px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 16px 20px;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+
+    background-color: #ffffff;
+}
+
+
+.caixa-info {
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+}
+
+
+/* ========================================
+   ÍCONE
+======================================== */
+
+.caixa-icon {
+    width: 46px;
+    height: 46px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background-color: #94a3b8;
+
+    color: #ffffff;
+
+    font-size: 18px;
+}
+
+
+/* ========================================
+   INFORMAÇÕES
+======================================== */
+
+.caixa-details {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.caixa-title {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+}
+
+
+.caixa-title h2 {
+    margin: 0;
+
+    color: #0f172a;
+
+    font-size: 16px;
+    font-weight: 500;
+}
+
+
+.caixa-details p {
+    margin: 4px 0 0;
+
+    color: #64748b;
+
+    font-size: 10px;
+}
+
+
+/* ========================================
+   STATUS
+======================================== */
+
+.caixa-status {
+    display: inline-flex;
+
+    padding: 3px 8px;
+
+    border-radius: 999px;
+
+    font-size: 10px;
+}
+
+
+.caixa-status-ativo {
+    border: 1px solid #a7f3d0;
+
+    background-color: #ecfdf5;
+
+    color: #059669;
+}
+
+
+.caixa-status-inativo {
+    border: 1px solid #dbe1e8;
+
+    background-color: #f8fafc;
+
+    color: #64748b;
+}
+
+
+/* ========================================
+   BOTÃO ABRIR CAIXA
+======================================== */
+
+.caixa-btn-primary {
+    height: 36px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 15px;
+
+    border: none;
+    border-radius: 6px;
+
+    background-color: #2563eb;
+
+    color: #ffffff;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition: background-color 0.15s ease;
+}
+
+
+.caixa-btn-primary:hover {
+    background-color: #1d4ed8;
+}
+
+
+/* ========================================
+   MODAL
+======================================== */
+
+.caixa-modal-overlay {
+    position: fixed;
+
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    z-index: 1000;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background-color: rgba(15, 23, 42, 0.42);
+
+    backdrop-filter: blur(4px);
+}
+
+
+.caixa-modal {
+    width: 100%;
+    max-width: 322px;
+
+    padding: 0;
+
+    border-radius: 12px;
+
+    background-color: #ffffff;
+
+    box-shadow:
+        0 20px 40px rgba(15, 23, 42, 0.16);
+
+    overflow: hidden;
+}
+
+
+/* ========================================
+   CABEÇALHO DO MODAL
+======================================== */
+
+.caixa-modal-header {
+    min-height: 63px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 20px;
+
+    border-bottom: 1px solid #f1f5f9;
+}
+
+
+.caixa-modal-title {
+    margin: 0;
+
+    color: #0f172a;
+
+    font-size: 15px;
+    font-weight: 500;
+}
+
+
+.caixa-modal-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 24px;
+    height: 24px;
+
+    color: #94a3b8;
+
+    font-size: 18px;
+    line-height: 1;
+
+    text-decoration: none;
+
+    transition: color 0.15s ease;
+}
+
+
+.caixa-modal-close:hover {
+    color: #475569;
+}
+
+
+/* ========================================
+   FORMULÁRIO DO MODAL
+======================================== */
+
+.caixa-modal form {
+    padding: 20px;
+}
+
+
+/* ========================================
+   CAMPOS
+======================================== */
+
+.caixa-form-group {
+    display: flex;
+    flex-direction: column;
+
+    gap: 6px;
+
+    margin-bottom: 14px;
+}
+
+
+.caixa-form-group label {
+    color: #475569;
+
+    font-size: 10px;
+    font-weight: 500;
+}
+
+
+.caixa-form-input {
+    width: 100%;
+    height: 36px;
+
+    padding: 0 11px;
+
+    box-sizing: border-box;
+
+    border: 1px solid #dbe1e8;
+    border-radius: 6px;
+
+    outline: none;
+
+    background-color: #ffffff;
+
+    color: #334155;
+
+    font-size: 12px;
+}
+
+
+.caixa-form-input::placeholder {
+    color: #94a3b8;
+}
+
+
+.caixa-form-input:focus {
+    border-color: #2563eb;
+
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.08);
+}
+
+
+.caixa-form-input[readonly] {
+    background-color: #f8fafc;
+
+    color: #64748b;
+
+    cursor: default;
+}
+
+
+.caixa-form-error {
+    color: #ef4444;
+
+    font-size: 10px;
+}
+
+
+/* ========================================
+   AÇÕES DO MODAL
+======================================== */
+
+.caixa-modal-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    margin-top: 18px;
+}
+
+
+.caixa-btn-secondary {
+    height: 36px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 15px;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+
+    background-color: #ffffff;
+
+    color: #475569;
+
+    font-size: 11px;
+    font-weight: 500;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.15s ease,
+        color 0.15s ease,
+        border-color 0.15s ease;
+}
+
+
+.caixa-btn-secondary:hover {
+    border-color: #2563eb;
+
+    color: #2563eb;
+}
+
+
+.caixa-modal-actions .caixa-btn-primary {
+    height: 36px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 15px;
+
+    border: none;
+    border-radius: 6px;
+
+    background-color: #2563eb;
+
+    color: #ffffff;
+
+    font-size: 11px;
+    font-weight: 600;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition: background-color 0.15s ease;
+}
+
+
+.caixa-modal-actions .caixa-btn-primary:hover {
+    background-color: #1d4ed8;
+}
+
+
+/* ========================================
+   HISTÓRICO
+======================================== */
+
+.caixa-historico {
+    width: 100%;
+}
+
+
+.caixa-historico-container {
+    width: 100%;
+
+    overflow: hidden;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+
+    background-color: #ffffff;
+}
+
+
+/* ========================================
+   CABEÇALHO DO HISTÓRICO
+======================================== */
+
+.caixa-historico-header {
+    min-height: 46px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 16px;
+
+    border-bottom: 1px solid #e5e7eb;
+
+    background-color: #ffffff;
+}
+
+
+.caixa-historico-header h2 {
+    margin: 0;
+
+    color: #0f172a;
+
+    font-size: 12px;
+    font-weight: 500;
+}
+
+
+/* ========================================
+   TABELA DO HISTÓRICO
+======================================== */
+
+.caixa-historico-tabela {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    table-layout: fixed;
+}
+
+
+.caixa-historico-tabela th {
+    height: 38px;
+
+    padding: 0 16px;
+
+    border-bottom: 1px solid #e5e7eb;
+
+    background-color: #ffffff;
+
+    color: #64748b;
+
+    font-size: 10px;
+    font-weight: 500;
+
+    text-align: left;
+}
+
+
+.caixa-historico-tabela td {
+    height: 46px;
+
+    padding: 0 16px;
+
+    border-bottom: 1px solid #f1f5f9;
+
+    color: #334155;
+
+    font-size: 12px;
+}
+
+
+.caixa-historico-tabela tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+.caixa-historico-tabela tbody tr:hover {
+    background-color: #fafcff;
+}
+
+
+/* ========================================
+   COLUNAS DO HISTÓRICO
+======================================== */
+
+.caixa-historico-tabela th:nth-child(1),
+.caixa-historico-tabela td:nth-child(1) {
+    width: 10%;
+}
+
+
+.caixa-historico-tabela th:nth-child(2),
+.caixa-historico-tabela td:nth-child(2) {
+    width: 18%;
+}
+
+
+.caixa-historico-tabela th:nth-child(3),
+.caixa-historico-tabela td:nth-child(3) {
+    width: 22%;
+}
+
+
+.caixa-historico-tabela th:nth-child(4),
+.caixa-historico-tabela td:nth-child(4) {
+    width: 16%;
+}
+
+
+.caixa-historico-tabela th:nth-child(5),
+.caixa-historico-tabela td:nth-child(5) {
+    width: 14%;
+}
+
+
+.caixa-historico-tabela th:nth-child(6),
+.caixa-historico-tabela td:nth-child(6) {
+    width: 20%;
+}
+
+
+/* ========================================
+   DADOS DO HISTÓRICO
+======================================== */
+
+.caixa-id {
+    color: #64748b;
+
+    font-family: monospace;
+
+    font-size: 10px;
+}
+
+
+.caixa-usuario {
+    color: #0f172a;
+
+    font-weight: 500;
+}
+
+
+.caixa-valor {
+    color: #0f172a;
+
+    font-weight: 600;
+}
+
+
+/* ========================================
+   TABELA VAZIA
+======================================== */
+
+.caixa-tabela-vazia {
+    height: 150px !important;
+
+    color: #94a3b8 !important;
+
+    text-align: center;
+}
+
+
+/* ========================================
+   RODAPÉ
+======================================== */
+
+.caixa-historico-footer {
+    min-height: 50px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 16px;
+
+    background-color: #ffffff;
+}
+
+
+.caixa-quantidade {
+    color: #64748b;
+
+    font-size: 10px;
+}
+
+
+/* ========================================
+   RESPONSIVIDADE
+======================================== */
+
+@media (max-width: 900px) {
+
+    .caixa-card {
+        gap: 15px;
+    }
+
+    .caixa-info {
+        min-width: 0;
+    }
+
+    .caixa-details {
+        min-width: 0;
+    }
+
+    .caixa-historico-container {
+        overflow-x: auto;
+    }
+
+    .caixa-historico-tabela {
+        min-width: 850px;
+    }
+}
+
+
+@media (max-width: 650px) {
+
+    .caixa-card {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .caixa-btn-primary {
+        width: 100%;
+    }
+
+    .caixa-modal {
+        max-width: none;
+    }
+}
