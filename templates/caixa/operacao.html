@@ -2,6 +2,7 @@
 
 {% load static %}
 
+
 {% block title %}
     Caixa | PVDPro
 {% endblock %}
@@ -14,7 +15,10 @@
 
 {% block content %}
 
-<link rel="stylesheet" href="{% static 'css/caixa.css' %}">
+<link
+    rel="stylesheet"
+    href="{% static 'css/caixa.css' %}"
+>
 
 
 <div class="caixa-container">
@@ -43,241 +47,317 @@
     </nav>
 
 
-    <!-- ========================================
-         OPERAÇÃO ATUAL
-    ========================================= -->
+    {% if caixa %}
 
-    <section class="caixa-operacao">
+        <!-- ========================================
+             CAIXA ABERTO
+        ========================================= -->
 
-        <div class="caixa-card">
+        <section class="caixa-card caixa-card-aberto">
 
             <div class="caixa-info">
 
-                <!-- Ícone -->
+                <div class="caixa-icon caixa-icon-aberto">
+                    ▣
+                </div>
+
+
+                <div class="caixa-details">
+
+                    <div class="caixa-title">
+
+                        <h2>
+                            Caixa Aberto
+                        </h2>
+
+
+                        <span class="caixa-status caixa-status-aberto">
+                            ● Em operação
+                        </span>
+
+                    </div>
+
+
+                    <p>
+
+                        Aberto por
+                        <strong>
+                            {{ caixa.usuario_abertura.get_full_name|default:caixa.usuario_abertura.username }}
+                        </strong>
+
+                        às
+                        <strong>
+                            {{ caixa.data_abertura|date:"H:i" }}
+                        </strong>
+
+                        · Valor inicial:
+
+                        <strong>
+                            R$ {{ caixa.valor_inicial|floatformat:2 }}
+                        </strong>
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- Futuramente será a URL para fechamento -->
+
+            <a
+                href=""
+                class="caixa-btn-fechar"
+            >
+                Fechar Caixa
+            </a>
+
+        </section>
+
+
+        <!-- ========================================
+             RESUMO
+        ========================================= -->
+
+        <section class="caixa-resumo">
+
+            <div class="caixa-resumo-card">
+
+                <span class="caixa-resumo-label">
+                    Valor inicial
+                </span>
+
+                <strong class="caixa-resumo-valor">
+                    R$ {{ caixa.valor_inicial|floatformat:2 }}
+                </strong>
+
+            </div>
+
+
+            <div class="caixa-resumo-card">
+
+                <span class="caixa-resumo-label">
+                    Total de entradas
+                </span>
+
+                <strong class="caixa-resumo-valor entrada">
+                    R$ {{ total_entradas|floatformat:2 }}
+                </strong>
+
+            </div>
+
+
+            <div class="caixa-resumo-card">
+
+                <span class="caixa-resumo-label">
+                    Total de saídas
+                </span>
+
+                <strong class="caixa-resumo-valor saida">
+                    R$ {{ total_saidas|floatformat:2 }}
+                </strong>
+
+            </div>
+
+
+            <div class="caixa-resumo-card">
+
+                <span class="caixa-resumo-label">
+                    Saldo atual
+                </span>
+
+                <strong class="caixa-resumo-valor saldo">
+                    R$ {{ saldo_atual|floatformat:2 }}
+                </strong>
+
+            </div>
+
+        </section>
+
+
+        <!-- ========================================
+             MOVIMENTAÇÕES
+        ========================================= -->
+
+        <section class="caixa-movimentacoes">
+
+            <div class="caixa-movimentacoes-header">
+
+                <h2>
+                    Movimentações de hoje
+                </h2>
+
+
+                <div class="caixa-movimentacoes-acoes">
+
+                    <!-- Futuramente abrirá o modal de suprimento -->
+
+                    <a
+                        href=""
+                        class="caixa-btn-suprimento"
+                    >
+                        + Suprimento
+                    </a>
+
+
+                    <!-- Futuramente abrirá o modal de sangria -->
+
+                    <a
+                        href=""
+                        class="caixa-btn-sangria"
+                    >
+                        − Sangria
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <div class="caixa-tabela-container">
+
+                <table class="caixa-movimentacoes-tabela">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Horário
+                            </th>
+
+                            <th>
+                                Descrição
+                            </th>
+
+                            <th>
+                                Tipo
+                            </th>
+
+                            <th>
+                                Valor
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for movimentacao in movimentacoes %}
+
+                            <tr>
+
+                                <td class="caixa-horario">
+
+                                    {{ movimentacao.data|date:"H:i" }}
+
+                                </td>
+
+
+                                <td>
+
+                                    {{ movimentacao.descricao }}
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="caixa-tipo caixa-tipo-venda">
+
+                                        Venda
+
+                                    </span>
+
+                                </td>
+
+
+                                <td class="caixa-valor-entrada">
+
+                                    +
+                                    R$
+                                    {{ movimentacao.valor|floatformat:2 }}
+
+                                </td>
+
+                            </tr>
+
+                        {% empty %}
+
+                            <tr>
+
+                                <td
+                                    colspan="4"
+                                    class="caixa-tabela-vazia"
+                                >
+                                    Nenhuma movimentação registrada.
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+    {% else %}
+
+        <!-- ========================================
+             NENHUM CAIXA ABERTO
+        ========================================= -->
+
+        <section class="caixa-card">
+
+            <div class="caixa-info">
 
                 <div class="caixa-icon">
                     ▣
                 </div>
 
 
-                <!-- Informações -->
-
                 <div class="caixa-details">
 
-                    {% if caixa %}
+                    <div class="caixa-title">
 
-                        {% if caixa.status == 'ABERTO' %}
+                        <h2>
+                            Caixa Fechado
+                        </h2>
 
-                            <!-- Caixa aberto -->
+                        <span class="caixa-status caixa-status-inativo">
+                            Inativo
+                        </span>
 
-                            <div class="caixa-title">
-
-                                <h2>
-                                    Caixa Aberto
-                                </h2>
-
-
-                                <span class="caixa-status caixa-status-ativo">
-                                    Ativo
-                                </span>
-
-                            </div>
+                    </div>
 
 
-                            <p>
-                                Aberto em
-                                {{ caixa.data_abertura|date:"d/m/Y \à\s H:i" }}
-                                por
-                                {{ caixa.usuario_abertura.get_full_name|default:caixa.usuario_abertura.username }}
-                            </p>
-
-
-                        {% else %}
-
-                            <!-- Caixa fechado -->
-
-                            <div class="caixa-title">
-
-                                <h2>
-                                    Caixa Fechado
-                                </h2>
-
-
-                                <span class="caixa-status caixa-status-inativo">
-                                    Inativo
-                                </span>
-
-                            </div>
-
-
-                            <p>
-                                Último fechamento:
-
-                                {% if caixa.data_fechamento %}
-
-                                    {{ caixa.data_fechamento|date:"d/m/Y \à\s H:i" }}
-
-                                    {% if caixa.usuario_fechamento %}
-
-                                        por
-                                        {{ caixa.usuario_fechamento.get_full_name|default:caixa.usuario_fechamento.username }}
-
-                                    {% endif %}
-
-                                {% else %}
-
-                                    Ainda não fechado
-
-                                {% endif %}
-                            </p>
-
-                        {% endif %}
-
-
-                    {% else %}
-
-                        <!-- Nenhum caixa cadastrado -->
-
-                        <div class="caixa-title">
-
-                            <h2>
-                                Caixa Fechado
-                            </h2>
-
-
-                            <span class="caixa-status caixa-status-inativo">
-                                Inativo
-                            </span>
-
-                        </div>
-
-
-                        <p>
-                            Nenhum caixa foi aberto ainda.
-                        </p>
-
-                    {% endif %}
-
-                </div>
-
-            </div>
-
-
-            <!-- Botão abrir caixa -->
-
-            {% if not caixa or caixa.status == 'FECHADO' %}
-
-                <a
-                    href="{% url 'caixa:abrir' %}"
-                    class="caixa-btn-primary"
-                >
-                    Abrir Caixa
-                </a>
-
-            {% endif %}
-
-        </div>
-
-    </section>
-
-</div>
-
-
-<!-- ========================================
-     MODAL — ABRIR CAIXA
-========================================= -->
-
-{% if modal_aberto %}
-
-    <div class="caixa-modal-overlay">
-
-        <div class="caixa-modal">
-
-            <!-- Cabeçalho -->
-
-            <div class="caixa-modal-header">
-
-                <div>
-
-                    <h2 class="caixa-modal-title">
-                        Abrir Caixa
-                    </h2>
-
-
-                    <p class="caixa-modal-description">
-                        Informe o valor inicial do caixa.
+                    <p>
+                        Nenhum caixa aberto no momento.
                     </p>
 
                 </div>
 
-
-                <!-- Fechar modal -->
-
-                <a
-                    href="{% url 'caixa:operacao' %}"
-                    class="caixa-modal-close"
-                >
-                    &times;
-                </a>
-
             </div>
 
 
-            <!-- Formulário -->
-
-            <form
-                method="post"
-                action="{% url 'caixa:abrir' %}"
+            <a
+                href="{% url 'caixa:abrir' %}"
+                class="caixa-btn-primary"
             >
+                Abrir Caixa
+            </a>
 
-                {% csrf_token %}
+        </section>
 
+    {% endif %}
 
-                <div class="caixa-form-group">
-
-                    {{ form.valor_inicial.label_tag }}
-
-                    {{ form.valor_inicial }}
-
-
-                    {% if form.valor_inicial.errors %}
-
-                        <div class="caixa-form-error">
-                            {{ form.valor_inicial.errors }}
-                        </div>
-
-                    {% endif %}
-
-                </div>
-
-
-                <!-- Ações -->
-
-                <div class="caixa-modal-actions">
-
-                    <a
-                        href="{% url 'caixa:operacao' %}"
-                        class="caixa-btn-secondary"
-                    >
-                        Cancelar
-                    </a>
-
-
-                    <button
-                        type="submit"
-                        class="caixa-btn-primary"
-                    >
-                        Abrir Caixa
-                    </button>
-
-                </div>
-
-            </form>
-
-        </div>
-
-    </div>
-
-{% endif %}
+</div>
 
 {% endblock %}
