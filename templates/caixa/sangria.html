@@ -1,0 +1,197 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+
+{% block title %}
+    Sangria | PVDPro
+{% endblock %}
+
+
+{% block page_title %}
+    Caixa
+{% endblock %}
+
+
+{% block content %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/caixa.css' %}"
+>
+
+
+<div class="caixa-modal-overlay">
+
+    <div class="caixa-modal-movimentacao">
+
+
+        <!-- CABEÇALHO -->
+
+        <div class="caixa-modal-header">
+
+            <div class="caixa-modal-heading">
+
+                <div class="caixa-modal-icon caixa-modal-icon-sangria">
+                    −
+                </div>
+
+
+                <div>
+
+                    <h2 class="caixa-modal-title">
+                        Sangria de Caixa
+                    </h2>
+
+                    <p class="caixa-modal-description">
+                        Retirada de dinheiro do caixa físico
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <a
+                href="{% url 'caixa:operacao' %}"
+                class="caixa-modal-close"
+            >
+                &times;
+            </a>
+
+        </div>
+
+
+        <!-- FORMULÁRIO -->
+
+        <form
+            method="post"
+            action="{% url 'caixa:sangria' %}"
+        >
+
+            {% csrf_token %}
+
+
+            <!-- SALDO -->
+
+            <div class="caixa-saldo-atual">
+
+                <span>
+                    Disponível para retirada
+                </span>
+
+                <strong class="saldo-sangria">
+                    R$ {{ saldo_atual|floatformat:2 }}
+                </strong>
+
+            </div>
+
+
+            <!-- VALOR -->
+
+            <div class="caixa-form-group">
+
+                {{ form.valor.label_tag }}
+
+                {{ form.valor }}
+
+                {% if form.valor.errors %}
+
+                    <div class="caixa-form-error">
+                        {{ form.valor.errors }}
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- FINALIDADE -->
+
+            <div class="caixa-form-group">
+
+                {{ form.descricao.label_tag }}
+
+                {{ form.descricao }}
+
+                {% if form.descricao.errors %}
+
+                    <div class="caixa-form-error">
+                        {{ form.descricao.errors }}
+                    </div>
+
+                {% endif %}
+
+                <small class="caixa-form-help">
+                    Descreva claramente para que esse dinheiro será utilizado.
+                </small>
+
+            </div>
+
+
+            <!-- OBSERVAÇÃO -->
+
+            <div class="caixa-form-group">
+
+                {{ form.observacao.label_tag }}
+
+                {{ form.observacao }}
+
+                {% if form.observacao.errors %}
+
+                    <div class="caixa-form-error">
+                        {{ form.observacao.errors }}
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- AVISO -->
+
+            <div class="caixa-modal-info caixa-modal-info-sangria">
+
+                <span>
+                    ⚠
+                </span>
+
+                <p>
+                    Registrado com data, hora e responsável
+                    <strong>
+                        {{ request.user.get_full_name|default:request.user.username }}
+                    </strong>.
+                    Esta operação não pode ser desfeita.
+                </p>
+
+            </div>
+
+
+            <!-- AÇÕES -->
+
+            <div class="caixa-modal-actions">
+
+                <a
+                    href="{% url 'caixa:operacao' %}"
+                    class="caixa-btn-secondary"
+                >
+                    Cancelar
+                </a>
+
+
+                <button
+                    type="submit"
+                    class="caixa-btn-confirmar-sangria"
+                >
+                    Confirmar Sangria
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

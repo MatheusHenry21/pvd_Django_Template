@@ -231,7 +231,7 @@
 
 
 /* ========================================
-   MODAL
+   MODAL DE MOVIMENTAÇÃO
 ======================================== */
 
 .caixa-modal-overlay {
@@ -256,9 +256,9 @@
 }
 
 
-.caixa-modal {
+.caixa-modal-movimentacao {
     width: 100%;
-    max-width: 322px;
+    max-width: 378px;
 
     padding: 0;
 
@@ -270,6 +270,8 @@
         0 20px 40px rgba(15, 23, 42, 0.16);
 
     overflow: hidden;
+
+    box-sizing: border-box;
 }
 
 
@@ -277,8 +279,16 @@
    CABEÇALHO DO MODAL
 ======================================== */
 
+.caixa-modal-heading {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+}
+
+
 .caixa-modal-header {
-    min-height: 63px;
+    min-height: 77px;
 
     display: flex;
     align-items: center;
@@ -287,6 +297,30 @@
     padding: 0 20px;
 
     border-bottom: 1px solid #f1f5f9;
+}
+
+
+.caixa-modal-icon {
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 9px;
+
+    font-size: 22px;
+    font-weight: 400;
+}
+
+
+.caixa-modal-icon-suprimento {
+    background-color: #d1fae5;
+
+    color: #00a878;
 }
 
 
@@ -300,6 +334,15 @@
 }
 
 
+.caixa-modal-description {
+    margin: 2px 0 0;
+
+    color: #94a3b8;
+
+    font-size: 10px;
+}
+
+
 .caixa-modal-close {
     display: flex;
     align-items: center;
@@ -308,12 +351,20 @@
     width: 24px;
     height: 24px;
 
+    flex-shrink: 0;
+
+    border: none;
+
+    background-color: transparent;
+
     color: #94a3b8;
 
-    font-size: 18px;
+    font-size: 20px;
     line-height: 1;
 
     text-decoration: none;
+
+    cursor: pointer;
 
     transition: color 0.15s ease;
 }
@@ -325,17 +376,13 @@
 
 
 /* ========================================
-   FORMULÁRIO DO MODAL
+   FORMULÁRIO
 ======================================== */
 
-.caixa-modal form {
+.caixa-modal-movimentacao form {
     padding: 20px;
 }
 
-
-/* ========================================
-   CAMPOS
-======================================== */
 
 .caixa-form-group {
     display: flex;
@@ -348,9 +395,9 @@
 
 
 .caixa-form-group label {
-    color: #475569;
+    color: #334155;
 
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 500;
 }
 
@@ -359,7 +406,7 @@
     width: 100%;
     height: 36px;
 
-    padding: 0 11px;
+    padding: 0 12px;
 
     box-sizing: border-box;
 
@@ -372,7 +419,17 @@
 
     color: #334155;
 
+    font-family: inherit;
     font-size: 12px;
+}
+
+
+.caixa-form-textarea {
+    height: 52px;
+
+    padding: 9px 12px;
+
+    resize: none;
 }
 
 
@@ -382,18 +439,9 @@
 
 
 .caixa-form-input:focus {
-    border-color: #2563eb;
+    border-color: #00b881;
 
-    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.08);
-}
-
-
-.caixa-form-input[readonly] {
-    background-color: #f8fafc;
-
-    color: #64748b;
-
-    cursor: default;
+    box-shadow: 0 0 0 2px rgba(0, 184, 129, 0.08);
 }
 
 
@@ -405,7 +453,88 @@
 
 
 /* ========================================
-   AÇÕES DO MODAL
+   SALDO ATUAL
+======================================== */
+
+.caixa-saldo-atual {
+    min-height: 44px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 18px;
+    padding: 0 12px;
+
+    border-radius: 8px;
+
+    background-color: #f8fafc;
+}
+
+
+.caixa-saldo-atual span {
+    color: #64748b;
+
+    font-size: 11px;
+}
+
+
+.caixa-saldo-atual strong {
+    color: #334155;
+
+    font-size: 13px;
+    font-weight: 500;
+}
+
+
+/* ========================================
+   INFORMAÇÃO
+======================================== */
+
+.caixa-modal-info {
+    min-height: 40px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    margin-top: 4px;
+    margin-bottom: 20px;
+
+    padding: 0 12px;
+
+    border-radius: 8px;
+
+    background-color: #f8fafc;
+}
+
+
+.caixa-modal-info span {
+    color: #94a3b8;
+
+    font-size: 12px;
+}
+
+
+.caixa-modal-info p {
+    margin: 0;
+
+    color: #64748b;
+
+    font-size: 10px;
+}
+
+
+.caixa-modal-info strong {
+    color: #475569;
+
+    font-weight: 600;
+}
+
+
+/* ========================================
+   AÇÕES
 ======================================== */
 
 .caixa-modal-actions {
@@ -413,9 +542,7 @@
     align-items: center;
     justify-content: flex-end;
 
-    gap: 10px;
-
-    margin-top: 18px;
+    gap: 8px;
 }
 
 
@@ -435,7 +562,8 @@
 
     color: #475569;
 
-    font-size: 11px;
+    font-family: inherit;
+    font-size: 12px;
     font-weight: 500;
 
     text-decoration: none;
@@ -456,7 +584,7 @@
 }
 
 
-.caixa-modal-actions .caixa-btn-primary {
+.caixa-btn-confirmar-suprimento {
     height: 36px;
 
     display: inline-flex;
@@ -468,14 +596,13 @@
     border: none;
     border-radius: 6px;
 
-    background-color: #2563eb;
+    background-color: #00a878;
 
     color: #ffffff;
 
-    font-size: 11px;
+    font-family: inherit;
+    font-size: 12px;
     font-weight: 600;
-
-    text-decoration: none;
 
     cursor: pointer;
 
@@ -483,8 +610,127 @@
 }
 
 
-.caixa-modal-actions .caixa-btn-primary:hover {
-    background-color: #1d4ed8;
+.caixa-btn-confirmar-suprimento:hover {
+    background-color: #008f68;
+}
+
+
+/* ========================================
+   RESPONSIVIDADE
+======================================== */
+
+@media (max-width: 650px) {
+
+    .caixa-modal-overlay {
+        padding: 15px;
+    }
+
+    .caixa-modal-movimentacao {
+        max-width: none;
+    }
+
+    .caixa-modal-header {
+        padding: 0 16px;
+    }
+
+    .caixa-modal-movimentacao form {
+        padding: 16px;
+    }
+
+    .caixa-modal-actions {
+        flex-direction: column-reverse;
+    }
+
+    .caixa-modal-actions a,
+    .caixa-modal-actions button {
+        width: 100%;
+    }
+}
+
+/* ========================================
+   MODAL DE SANGRIA
+======================================== */
+
+.caixa-modal-icon-sangria {
+    background-color: #fee2e2;
+
+    color: #ef4444;
+}
+
+
+/* ========================================
+   SALDO DA SANGRIA
+======================================== */
+
+.saldo-sangria {
+    color: #00a878 !important;
+}
+
+
+/* ========================================
+   AJUDA DO FORMULÁRIO
+======================================== */
+
+.caixa-form-help {
+    margin-top: -1px;
+
+    color: #94a3b8;
+
+    font-size: 10px;
+}
+
+
+/* ========================================
+   INFORMAÇÃO DA SANGRIA
+======================================== */
+
+.caixa-modal-info-sangria {
+    background-color: #fffbeb;
+}
+
+
+.caixa-modal-info-sangria span {
+    color: #f59e0b;
+}
+
+
+.caixa-modal-info-sangria p {
+    color: #d97706;
+}
+
+
+/* ========================================
+   BOTÃO CONFIRMAR SANGRIA
+======================================== */
+
+.caixa-btn-confirmar-sangria {
+    height: 36px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 15px;
+
+    border: none;
+    border-radius: 6px;
+
+    background-color: #ef4444;
+
+    color: #ffffff;
+
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: background-color 0.15s ease;
+}
+
+
+.caixa-btn-confirmar-sangria:hover {
+    background-color: #dc2626;
 }
 
 

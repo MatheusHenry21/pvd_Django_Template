@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}
+    Suprimento | PVDPro
+{% endblock %}
+
+{% block page_title %}
+    Caixa
+{% endblock %}
+
+{% block content %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/caixa.css' %}"
+>
+
+<div class="caixa-modal-overlay">
+
+    <div class="caixa-modal-movimentacao">
+
+        <div class="caixa-modal-header">
+
+            <div class="caixa-modal-heading">
+
+                <div class="caixa-modal-icon caixa-modal-icon-suprimento">
+                    +
+                </div>
+
+                <div>
+
+                    <h2 class="caixa-modal-title">
+                        Suprimento de Caixa
+                    </h2>
+
+                    <p class="caixa-modal-description">
+                        Entrada de dinheiro no caixa físico
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <a
+                href="{% url 'caixa:operacao' %}"
+                class="caixa-modal-close"
+            >
+                &times;
+            </a>
+
+        </div>
+
+
+        <form
+            method="post"
+            action="{% url 'caixa:suprimento' %}"
+        >
+
+            {% csrf_token %}
+
+
+            <div class="caixa-saldo-atual">
+
+                <span>
+                    Saldo atual
+                </span>
+
+                <strong>
+                    R$ {{ saldo_atual|floatformat:2 }}
+                </strong>
+
+            </div>
+
+
+            <div class="caixa-form-group">
+
+                {{ form.valor.label_tag }}
+
+                {{ form.valor }}
+
+                {% if form.valor.errors %}
+                    <div class="caixa-form-error">
+                        {{ form.valor.errors }}
+                    </div>
+                {% endif %}
+
+            </div>
+
+
+            <div class="caixa-form-group">
+
+                {{ form.descricao.label_tag }}
+
+                {{ form.descricao }}
+
+                {% if form.descricao.errors %}
+                    <div class="caixa-form-error">
+                        {{ form.descricao.errors }}
+                    </div>
+                {% endif %}
+
+            </div>
+
+
+            <div class="caixa-form-group">
+
+                {{ form.observacao.label_tag }}
+
+                {{ form.observacao }}
+
+                {% if form.observacao.errors %}
+                    <div class="caixa-form-error">
+                        {{ form.observacao.errors }}
+                    </div>
+                {% endif %}
+
+            </div>
+
+
+            <div class="caixa-modal-info">
+
+                <span>
+                    ⓘ
+                </span>
+
+                <p>
+                    Registrado com data, hora e responsável
+                    <strong>
+                        {{ request.user.get_full_name|default:request.user.username }}
+                    </strong>.
+                </p>
+
+            </div>
+
+
+            <div class="caixa-modal-actions">
+
+                <a
+                    href="{% url 'caixa:operacao' %}"
+                    class="caixa-btn-secondary"
+                >
+                    Cancelar
+                </a>
+
+                <button
+                    type="submit"
+                    class="caixa-btn-confirmar-suprimento"
+                >
+                    Confirmar Suprimento
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}
