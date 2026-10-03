@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+
+{% block title %}
+    Fechar Caixa | PVDPro
+{% endblock %}
+
+
+{% block page_title %}
+    Caixa
+{% endblock %}
+
+
+{% block content %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/caixa.css' %}"
+>
+
+
+<div class="caixa-modal-overlay">
+
+    <div class="caixa-modal caixa-modal-fechamento">
+
+        <!-- ========================================
+             CABEÇALHO
+        ========================================= -->
+
+        <div class="caixa-modal-header">
+
+            <div>
+
+                <h2>
+                    Fechar Caixa
+                </h2>
+
+            </div>
+
+
+            <a
+                href="{% url 'caixa:operacao' %}"
+                class="caixa-modal-close"
+            >
+                ×
+            </a>
+
+        </div>
+
+
+        <!-- ========================================
+             FORMULÁRIO
+        ========================================= -->
+
+        <form
+            method="post"
+            class="caixa-modal-movimentacao"
+        >
+
+            {% csrf_token %}
+
+
+            <!-- SALDO ESPERADO -->
+
+            <div class="caixa-saldo-atual">
+
+                <span>
+                    Saldo esperado
+                </span>
+
+                <strong>
+                    R$ {{ saldo_esperado|floatformat:2 }}
+                </strong>
+
+            </div>
+
+
+            <!-- VALOR CONTADO -->
+
+            <div class="caixa-form-group">
+
+                <label for="{{ form.valor_final.id_for_label }}">
+
+                    Valor contado no caixa (R$)
+
+                    <span class="campo-obrigatorio">
+                        *
+                    </span>
+
+                </label>
+
+
+                {{ form.valor_final }}
+
+
+                {% if form.valor_final.errors %}
+
+                    <div class="caixa-form-error">
+
+                        {{ form.valor_final.errors }}
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- OBSERVAÇÃO -->
+
+            <div class="caixa-form-group">
+
+                <label for="{{ form.observacao_fechamento.id_for_label }}">
+
+                    Observação
+
+                </label>
+
+
+                {{ form.observacao_fechamento }}
+
+
+                {% if form.observacao_fechamento.errors %}
+
+                    <div class="caixa-form-error">
+
+                        {{ form.observacao_fechamento.errors }}
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- ========================================
+                 AÇÕES
+            ========================================= -->
+
+            <div class="caixa-modal-actions">
+
+                <a
+                    href="{% url 'caixa:operacao' %}"
+                    class="caixa-btn-cancelar"
+                >
+                    Cancelar
+                </a>
+
+
+                <button
+                    type="submit"
+                    class="caixa-btn-confirmar-fechamento"
+                >
+                    Confirmar Fechamento
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

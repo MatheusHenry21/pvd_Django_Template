@@ -107,3 +107,37 @@ class SangriaForm(forms.ModelForm):
                 }
             ),
         }
+
+class FechamentoCaixaForm(forms.ModelForm):
+
+    class Meta:
+        model = Caixa
+
+        fields = [
+            'valor_final',
+            'observacao_fechamento',
+        ]
+
+        widgets = {
+            'valor_final': forms.NumberInput(
+                attrs={
+                    'class': 'caixa-form-input',
+                    'placeholder': '0,00',
+                    'step': '0.01',
+                    'min': '0',
+                }
+            ),
+
+            'observacao_fechamento': forms.Textarea(
+                attrs={
+                    'class': 'caixa-form-input caixa-form-textarea',
+                    'placeholder': 'Opcional...',
+                    'rows': 3,
+                }
+            ),
+        }
+
+        labels = {
+            'valor_final': 'Valor contado no caixa (R$)',
+            'observacao_fechamento': 'Observação',
+        }

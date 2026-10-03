@@ -9,4 +9,5 @@ urlpatterns = [
     path('historico/', views.HistoricoCaixa.as_view(), name='historico'), 
     path('suprimento/', views.SuprimentoCaixaView.as_view(), name='suprimento'),
     path('sangria/', views.SangriaCaixaView.as_view(), name='sangria'),
+    path('fechar/', views.FecharCaixaView.as_view(), name='fechar'),
 ]

@@ -42,6 +42,10 @@ class Caixa(models.Model):
         blank=True
     )
 
+    observacao_fechamento = models.TextField(
+        blank=True
+    )
+
     status = models.CharField(
         max_length=10,
         choices=Status.choices,
