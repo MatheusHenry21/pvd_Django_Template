@@ -2,160 +2,317 @@
 
 {% load static %}
 
+
 {% block title %}
-    Histórico | PVDPro
+
+Histórico | PVDPro
+
 {% endblock %}
 
 
 {% block page_title %}
-    Caixa
+
+Caixa
+
+{% endblock %}
+
+
+{% block extra_css %}
+
+<link rel="stylesheet" href="{% static 'css/caixa.css' %}">
+
 {% endblock %}
 
 
 {% block content %}
 
-<link
-    rel="stylesheet"
-    href="{% static 'css/caixa.css' %}"
->
+<div class="caixa-historico-container">
 
+    <!-- ========================================
+         ABAS
+    ======================================== -->
 
-<div class="caixa-container">
+    <div class="caixa-tabs">
 
-    <nav class="caixa-tabs">
-
-        <a
-            href="{% url 'caixa:operacao' %}"
-            class="caixa-tab"
-        >
+        <a href="{% url 'caixa:operacao' %}" class="caixa-tab">
             Operação Atual
         </a>
 
-
-        <a
-            href="{% url 'caixa:historico' %}"
-            class="caixa-tab active"
-        >
+        <a href="{% url 'caixa:historico' %}" class="caixa-tab active">
             Histórico
         </a>
 
-    </nav>
+    </div>
 
 
-    <section class="historico-card">
+    <!-- ========================================
+         FILTROS
+    ======================================== -->
 
-        <div class="historico-header">
+    <div class="caixa-historico-filtros">
 
-            <h2>
-                Histórico de Caixas
-            </h2>
+        <div class="caixa-historico-periodos">
+
+            <a href="#" class="caixa-historico-periodo active">
+                Esta semana
+            </a>
+
+            <a href="#" class="caixa-historico-periodo">
+                Este mês
+            </a>
+
+            <a href="#" class="caixa-historico-periodo">
+                Este ano
+            </a>
+
+            <a href="#" class="caixa-historico-periodo">
+                Personalizado
+            </a>
 
         </div>
 
 
-        {% if caixas %}
+        <form method="get" class="caixa-historico-busca">
 
-            <table class="historico-table">
+            <span class="caixa-historico-busca-icon">
+                ⌕
+            </span>
 
-                <thead>
+            <input type="text" name="busca" value="{{ busca }}" placeholder="Buscar por responsável">
 
-                    <tr>
-                        <th>Caixa</th>
-                        <th>Abertura</th>
-                        <th>Operador</th>
-                        <th>Valor inicial</th>
-                        <th>Status</th>
-                        <th>Fechamento</th>
-                    </tr>
+            <input type="hidden" name="periodo" value="{{ periodo }}">
 
-                </thead>
+        </form>
+
+    </div>
 
 
-                <tbody>
+    <!-- ========================================
+         RESUMO
+    ======================================== -->
 
-                    {% for caixa in caixas %}
+    <div class="caixa-historico-resumo">
 
-                        <tr>
+        <!-- SESSÕES -->
 
-                            <td>
-                                #{{ caixa.id }}
-                            </td>
+        <div class="caixa-historico-resumo-card">
 
+            <span>
+                Sessões no período
+            </span>
 
-                            <td>
-                                {{ caixa.data_abertura|date:"d/m/Y H:i" }}
-                            </td>
+            <strong>
+                {{ caixas|length }}
+            </strong>
 
-
-                            <td>
-                                {{ caixa.usuario_abertura.get_full_name|default:caixa.usuario_abertura.username }}
-                            </td>
-
-
-                            <td>
-                                R$ {{ caixa.valor_inicial|floatformat:2 }}
-                            </td>
+        </div>
 
 
-                            <td>
+        <!-- FATURAMENTO -->
 
-                                {% if caixa.status == 'ABERTO' %}
+        <div class="caixa-historico-resumo-card">
 
-                                    <span class="status aberto">
-                                        Aberto
-                                    </span>
+            <span>
+                Total faturado
+            </span>
 
-                                {% else %}
+            <strong class="historico-faturamento">
+                R$ {{ total_faturado|floatformat:2 }}
+            </strong>
 
-                                    <span class="status fechado">
-                                        Fechado
-                                    </span>
-
-                                {% endif %}
-
-                            </td>
+        </div>
 
 
-                            <td>
+        <!-- SANGRIAS -->
 
-                                {% if caixa.data_fechamento %}
+        <div class="caixa-historico-resumo-card">
 
-                                    {{ caixa.data_fechamento|date:"d/m/Y H:i" }}
+            <span>
+                Total de sangrias
+            </span>
 
-                                {% else %}
+            <strong class="historico-sangria">
+                R$ {{ total_sangrias|floatformat:2 }}
+            </strong>
 
-                                    —
-
-                                {% endif %}
-
-                            </td>
-
-                        </tr>
-
-                    {% endfor %}
-
-                </tbody>
-
-            </table>
+        </div>
 
 
-        {% else %}
+        <!-- SUPRIMENTOS -->
 
-            <div class="historico-vazio">
+        <div class="caixa-historico-resumo-card">
 
-                <h3>
-                    Nenhum caixa encontrado
-                </h3>
+            <span>
+                Total de suprimentos
+            </span>
 
-                <p>
-                    Ainda não existem caixas registrados.
-                </p>
+            <strong class="historico-suprimento">
+                R$ {{ total_suprimentos|floatformat:2 }}
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================================
+         CAIXAS
+    ======================================== -->
+
+    <div class="caixa-historico-lista">
+
+        {% for caixa in caixas %}
+
+        <div class="caixa-historico-item">
+
+            <div class="caixa-historico-icone">
+                ▣
+            </div>
+
+
+            <div class="caixa-historico-informacoes">
+
+                <div class="caixa-historico-data">
+
+                    {{ caixa.data_abertura|date:"d/m/Y" }}
+
+                    <span>
+                        {{ caixa.data_abertura|date:"H:i" }}
+                        -
+                        {% if caixa.data_fechamento %}
+                        {{ caixa.data_fechamento|date:"H:i" }}
+                        {% endif %}
+                    </span>
+
+                </div>
+
+
+                <div class="caixa-historico-responsaveis">
+
+                    Abertura:
+
+                    <strong>
+                        {{ caixa.usuario_abertura.get_full_name|default:caixa.usuario_abertura.username }}
+                    </strong>
+
+                    <span>
+                        ·
+                    </span>
+
+                    Fechamento:
+
+                    <strong>
+                        {% if caixa.usuario_fechamento %}
+                        {{ caixa.usuario_fechamento.get_full_name|default:caixa.usuario_fechamento.username }}
+                        {% else %}
+                        —
+                        {% endif %}
+                    </strong>
+
+                </div>
 
             </div>
 
-        {% endif %}
 
-    </section>
+            <div class="caixa-historico-dados">
+
+                <div>
+
+                    <span>
+                        Vendas
+                    </span>
+
+                    <strong>
+                        {{ caixa.total_vendas }}
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Faturamento
+                    </span>
+
+                    <strong>
+                        R$ {{ caixa.faturamento|floatformat:2 }}
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Saldo final
+                    </span>
+
+                    <strong>
+                        R$ {{ caixa.saldo_final|floatformat:2 }}
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Diferença
+                    </span>
+
+                    {% if caixa.diferenca_tipo == 'positiva' %}
+
+                    <strong class="historico-diferenca-positiva">
+                        +R$ {{ caixa.diferenca|floatformat:2 }}
+                    </strong>
+
+                    {% elif caixa.diferenca_tipo == 'negativa' %}
+
+                    <strong class="historico-diferenca-negativa">
+                        -R$ {{ caixa.diferenca|stringformat:"s"|slice:"1:"|floatformat:2 }}
+                    </strong>
+
+                    {% else %}
+
+                    <strong class="historico-sem-diferenca">
+                        Sem diferença
+                    </strong>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- ========================================
+                     SETA DO CAIXA
+                ======================================== -->
+
+            <a href="#" class="caixa-historico-seta" title="Ver detalhes">
+                ↓
+            </a>
+
+        </div>
+
+        {% empty %}
+
+        <div class="caixa-historico-vazio">
+
+            <strong>
+                Nenhum histórico encontrado
+            </strong>
+
+            <span>
+                Os caixas fechados aparecerão aqui.
+            </span>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
 
 </div>
 

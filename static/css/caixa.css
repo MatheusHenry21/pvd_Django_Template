@@ -943,172 +943,445 @@
 }
 
 /* ========================================
-   HISTÓRICO
+   HISTÓRICO DO CAIXA
 ======================================== */
-
-.caixa-historico {
-    width: 100%;
-}
-
 
 .caixa-historico-container {
     width: 100%;
-
-    overflow: hidden;
-
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-
-    background-color: #ffffff;
 }
 
 
 /* ========================================
-   CABEÇALHO DO HISTÓRICO
+   ABAS
 ======================================== */
 
-.caixa-historico-header {
-    min-height: 46px;
+.caixa-tabs {
+    display: inline-flex;
+    align-items: center;
 
+    padding: 3px;
+
+    margin-bottom: 16px;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 9px;
+
+    background-color: #ffffff;
+}
+
+.caixa-tab {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    height: 32px;
+
+    padding: 0 20px;
+
+    border-radius: 7px;
+
+    color: #475569;
+
+    font-size: 11px;
+
+    text-decoration: none;
+}
+
+.caixa-tab:hover {
+    color: #2563eb;
+}
+
+.caixa-tab.active {
+    background-color: #2563eb;
+
+    color: #ffffff;
+}
+
+
+/* ========================================
+   FILTROS
+======================================== */
+
+.caixa-historico-filtros {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 12px;
+
+    margin-bottom: 14px;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+
+    background-color: #ffffff;
+}
+
+.caixa-historico-periodos {
     display: flex;
     align-items: center;
 
-    padding: 0 16px;
-
-    border-bottom: 1px solid #e5e7eb;
-
-    background-color: #ffffff;
+    gap: 5px;
 }
 
+.caixa-historico-periodo {
+    display: inline-flex;
+    align-items: center;
 
-.caixa-historico-header h2 {
-    margin: 0;
+    height: 32px;
 
-    color: #0f172a;
+    padding: 0 12px;
 
-    font-size: 12px;
-    font-weight: 500;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+
+    background-color: #f8fafc;
+
+    color: #475569;
+
+    font-size: 10px;
+
+    text-decoration: none;
+}
+
+.caixa-historico-periodo:hover {
+    border-color: #2563eb;
+
+    color: #2563eb;
+}
+
+.caixa-historico-periodo.active {
+    border-color: #2563eb;
+
+    background-color: #2563eb;
+
+    color: #ffffff;
 }
 
 
 /* ========================================
-   TABELA DO HISTÓRICO
+   BUSCA
 ======================================== */
 
-.caixa-historico-tabela {
+.caixa-historico-busca {
+    display: flex;
+    align-items: center;
+
+    width: 205px;
+    height: 32px;
+
+    padding: 0 10px;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+
+    background-color: #ffffff;
+}
+
+.caixa-historico-busca-icon {
+    margin-right: 7px;
+
+    color: #94a3b8;
+
+    font-size: 14px;
+}
+
+.caixa-historico-busca input {
     width: 100%;
 
-    border-collapse: collapse;
+    border: none;
+    outline: none;
 
-    table-layout: fixed;
+    background: transparent;
+
+    color: #334155;
+
+    font-size: 10px;
+}
+
+.caixa-historico-busca input::placeholder {
+    color: #94a3b8;
 }
 
 
-.caixa-historico-tabela th {
-    height: 38px;
+/* ========================================
+   RESUMO
+======================================== */
 
-    padding: 0 16px;
+.caixa-historico-resumo {
+    display: grid;
 
-    border-bottom: 1px solid #e5e7eb;
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 14px;
+
+    margin-bottom: 16px;
+}
+
+.caixa-historico-resumo-card {
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+
+    min-height: 82px;
+
+    padding: 14px;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 9px;
 
     background-color: #ffffff;
+}
+
+.caixa-historico-resumo-card span {
+    margin-bottom: 8px;
 
     color: #64748b;
 
     font-size: 10px;
-    font-weight: 500;
+}
 
-    text-align: left;
+.caixa-historico-resumo-card strong {
+    color: #0f172a;
+
+    font-size: 20px;
+
+    font-weight: 500;
+}
+
+.caixa-historico-resumo-card .historico-faturamento {
+    color: #00a884;
+}
+
+.caixa-historico-resumo-card .historico-sangria {
+    color: #ff1f2d;
+}
+
+.caixa-historico-resumo-card .historico-suprimento {
+    color: #2563eb;
 }
 
 
-.caixa-historico-tabela td {
-    height: 46px;
+/* ========================================
+   LISTA
+======================================== */
 
-    padding: 0 16px;
+.caixa-historico-lista {
+    display: flex;
+    flex-direction: column;
 
-    border-bottom: 1px solid #f1f5f9;
+    gap: 10px;
+}
+
+
+/* ========================================
+   ITEM
+======================================== */
+
+.caixa-historico-item {
+    display: flex;
+    align-items: center;
+
+    min-height: 62px;
+
+    padding: 12px 14px;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 9px;
+
+    background-color: #ffffff;
+}
+
+
+/* ========================================
+   ÍCONE
+======================================== */
+
+.caixa-historico-icone {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 34px;
+    height: 34px;
+
+    margin-right: 14px;
+
+    border-radius: 7px;
+
+    background-color: #f1f5f9;
+
+    color: #64748b;
+
+    font-size: 15px;
+}
+
+
+/* ========================================
+   INFORMAÇÕES
+======================================== */
+
+.caixa-historico-informacoes {
+    flex: 1;
+
+    min-width: 270px;
+}
+
+.caixa-historico-data {
+    color: #0f172a;
+
+    font-size: 12px;
+
+    font-weight: 500;
+}
+
+.caixa-historico-data span {
+    margin-left: 5px;
+
+    color: #94a3b8;
+
+    font-size: 10px;
+
+    font-weight: 400;
+}
+
+.caixa-historico-responsaveis {
+    margin-top: 3px;
+
+    color: #64748b;
+
+    font-size: 10px;
+}
+
+.caixa-historico-responsaveis strong {
+    color: #334155;
+
+    font-weight: 600;
+}
+
+.caixa-historico-responsaveis span {
+    margin: 0 3px;
+
+    color: #cbd5e1;
+}
+
+
+/* ========================================
+   DADOS
+======================================== */
+
+.caixa-historico-dados {
+    display: flex;
+    align-items: center;
+
+    gap: 28px;
+
+    margin-right: 18px;
+}
+
+.caixa-historico-dados > div {
+    display: flex;
+    flex-direction: column;
+
+    align-items: flex-end;
+
+    min-width: 65px;
+}
+
+.caixa-historico-dados span {
+    margin-bottom: 4px;
+
+    color: #94a3b8;
+
+    font-size: 9px;
+}
+
+.caixa-historico-dados strong {
+    color: #0f172a;
+
+    font-size: 11px;
+
+    font-weight: 600;
+}
+
+.caixa-historico-dados .historico-sem-diferenca {
+    color: #00a884;
+}
+
+
+/* ========================================
+   SETA
+======================================== */
+
+.caixa-historico-seta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 24px;
+    height: 24px;
+
+    color: #94a3b8;
+
+    font-size: 16px;
+
+    text-decoration: none;
+
+    transition: 0.15s ease;
+}
+
+.caixa-historico-seta:hover {
+    color: #2563eb;
+}
+
+
+/* ========================================
+   VAZIO
+======================================== */
+
+.caixa-historico-vazio {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 150px;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 9px;
+
+    background-color: #ffffff;
+}
+
+.caixa-historico-vazio strong {
+    margin-bottom: 5px;
 
     color: #334155;
 
     font-size: 12px;
 }
 
-
-.caixa-historico-tabela tbody tr:last-child td {
-    border-bottom: none;
-}
-
-
-.caixa-historico-tabela tbody tr:hover {
-    background-color: #fafcff;
-}
-
-
-/* ========================================
-   COLUNAS DO HISTÓRICO
-======================================== */
-
-.caixa-historico-tabela th:nth-child(1),
-.caixa-historico-tabela td:nth-child(1) {
-    width: 10%;
-}
-
-
-.caixa-historico-tabela th:nth-child(2),
-.caixa-historico-tabela td:nth-child(2) {
-    width: 18%;
-}
-
-
-.caixa-historico-tabela th:nth-child(3),
-.caixa-historico-tabela td:nth-child(3) {
-    width: 22%;
-}
-
-
-.caixa-historico-tabela th:nth-child(4),
-.caixa-historico-tabela td:nth-child(4) {
-    width: 16%;
-}
-
-
-.caixa-historico-tabela th:nth-child(5),
-.caixa-historico-tabela td:nth-child(5) {
-    width: 14%;
-}
-
-
-.caixa-historico-tabela th:nth-child(6),
-.caixa-historico-tabela td:nth-child(6) {
-    width: 20%;
-}
-
-
-/* ========================================
-   DADOS DO HISTÓRICO
-======================================== */
-
-.caixa-id {
-    color: #64748b;
-
-    font-family: monospace;
+.caixa-historico-vazio span {
+    color: #94a3b8;
 
     font-size: 10px;
 }
 
+/* ========================================
+   DIFERENÇA DO CAIXA
+======================================== */
 
-.caixa-usuario {
-    color: #0f172a;
-
-    font-weight: 500;
+.historico-diferenca-positiva {
+    color: #2563eb;
 }
 
+.historico-diferenca-negativa {
+    color: #ef4444;
+}
 
-.caixa-valor {
-    color: #0f172a;
-
-    font-weight: 600;
+.historico-sem-diferenca {
+    color: #059669;
 }
 
 

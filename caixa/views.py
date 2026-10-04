@@ -1,11 +1,12 @@
 from decimal import Decimal
+from datetime import datetime, timedelta
 
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils import timezone
-from django.db.models import Sum
+from django.db.models import Prefetch, Sum, Q, Count
 from django.core.paginator import Paginator
 from django.views.generic import CreateView, ListView, TemplateView, UpdateView
 
@@ -207,7 +208,6 @@ class AbrirCaixa(LoginRequiredMixin, CreateView):
 
         return response
 
-
 class HistoricoCaixa(LoginRequiredMixin, ListView):
 
     model = Caixa
@@ -216,17 +216,340 @@ class HistoricoCaixa(LoginRequiredMixin, ListView):
 
     context_object_name = 'caixas'
 
-    def get_queryset(self):
+    def get_periodo(self):
+
+        periodo = self.request.GET.get(
+            'periodo',
+            'semana'
+        )
+
+        hoje = timezone.localdate()
+
+        if periodo == 'mes':
+
+            inicio = hoje.replace(
+                day=1
+            )
+
+            if inicio.month == 12:
+
+                fim = inicio.replace(
+                    year=inicio.year + 1,
+                    month=1
+                )
+
+            else:
+
+                fim = inicio.replace(
+                    month=inicio.month + 1
+                )
+
+        elif periodo == 'ano':
+
+            inicio = hoje.replace(
+                month=1,
+                day=1
+            )
+
+            fim = inicio.replace(
+                year=inicio.year + 1
+            )
+
+        else:
+
+            # Semana começando na segunda-feira
+            inicio = hoje - timedelta(
+                days=hoje.weekday()
+            )
+
+            fim = inicio + timedelta(
+                days=7
+            )
+
+            periodo = 'semana'
+
+        inicio_datetime = timezone.make_aware(
+            datetime.combine(
+                inicio,
+                datetime.min.time()
+            )
+        )
+
+        fim_datetime = timezone.make_aware(
+            datetime.combine(
+                fim,
+                datetime.min.time()
+            )
+        )
 
         return (
+            periodo,
+            inicio,
+            fim,
+            inicio_datetime,
+            fim_datetime
+        )
+
+    def get_queryset(self):
+
+        (
+            periodo,
+            inicio,
+            fim,
+            inicio_datetime,
+            fim_datetime
+        ) = self.get_periodo()
+
+        queryset = (
             Caixa.objects
+            .filter(
+                status=Caixa.Status.FECHADO,
+                data_abertura__gte=inicio_datetime,
+                data_abertura__lt=fim_datetime
+            )
             .select_related(
                 'usuario_abertura',
                 'usuario_fechamento'
             )
-            .order_by('-data_abertura')
+            .prefetch_related(
+                Prefetch(
+                    'vendas',
+                    queryset=Venda.objects.filter(
+                        status=Venda.Status.FINALIZADA
+                    ),
+                    to_attr='vendas_finalizadas'
+                ),
+                Prefetch(
+                    'movimentacoes',
+                    to_attr='movimentacoes_historico'
+                )
+            )
         )
 
+        busca = self.request.GET.get(
+            'busca',
+            ''
+        ).strip()
+
+        if busca:
+
+            filtro = (
+                Q(
+                    usuario_abertura__first_name__icontains=busca
+                )
+                |
+                Q(
+                    usuario_abertura__last_name__icontains=busca
+                )
+                |
+                Q(
+                    usuario_abertura__username__icontains=busca
+                )
+                |
+                Q(
+                    usuario_fechamento__first_name__icontains=busca
+                )
+                |
+                Q(
+                    usuario_fechamento__last_name__icontains=busca
+                )
+                |
+                Q(
+                    usuario_fechamento__username__icontains=busca
+                )
+            )
+
+            try:
+
+                data_busca = datetime.strptime(
+                    busca,
+                    '%d/%m/%Y'
+                ).date()
+
+                filtro |= Q(
+                    data_abertura__date=data_busca
+                )
+
+                filtro |= Q(
+                    data_fechamento__date=data_busca
+                )
+
+            except ValueError:
+
+                pass
+
+            queryset = queryset.filter(filtro)
+
+        return queryset.order_by('-data_abertura')
+    
+    def get_context_data(self, **kwargs):
+
+        context = super().get_context_data(**kwargs)
+
+        (
+            periodo,
+            inicio,
+            fim,
+            inicio_datetime,
+            fim_datetime
+        ) = self.get_periodo()
+
+        # ========================================
+        # TOTAL FATURADO
+        # SOMENTE VENDAS DE CAIXAS FECHADOS
+        # ========================================
+
+        total_faturado = (
+            Venda.objects
+            .filter(
+                caixa__status=Caixa.Status.FECHADO,
+                status=Venda.Status.FINALIZADA,
+                data__gte=inicio_datetime,
+                data__lt=fim_datetime
+            )
+            .aggregate(
+                total=Sum('total')
+            )['total']
+            or Decimal('0.00')
+        )
+
+        # ========================================
+        # TOTAL DE SUPRIMENTOS
+        # SOMENTE CAIXAS FECHADOS
+        # ========================================
+
+        total_suprimentos = (
+            MovimentacaoCaixa.objects
+            .filter(
+                caixa__status=Caixa.Status.FECHADO,
+                tipo=MovimentacaoCaixa.Tipo.SUPRIMENTO,
+                data__gte=inicio_datetime,
+                data__lt=fim_datetime
+            )
+            .aggregate(
+                total=Sum('valor')
+            )['total']
+            or Decimal('0.00')
+        )
+
+        # ========================================
+        # TOTAL DE SANGRIAS
+        # SOMENTE CAIXAS FECHADOS
+        # ========================================
+
+        total_sangrias = (
+            MovimentacaoCaixa.objects
+            .filter(
+                caixa__status=Caixa.Status.FECHADO,
+                tipo=MovimentacaoCaixa.Tipo.SANGRIA,
+                data__gte=inicio_datetime,
+                data__lt=fim_datetime
+            )
+            .aggregate(
+                total=Sum('valor')
+            )['total']
+            or Decimal('0.00')
+        )
+
+        # ========================================
+        # CONTEXTO
+        # ========================================
+
+        context['total_faturado'] = total_faturado
+
+        context['total_suprimentos'] = total_suprimentos
+
+        context['total_sangrias'] = total_sangrias
+
+        context['periodo'] = periodo
+
+        context['data_inicio'] = inicio
+
+        context['data_fim'] = fim - timedelta(
+            days=1
+        )
+
+        for caixa in context['caixas']:
+
+            vendas = caixa.vendas_finalizadas
+            movimentacoes = caixa.movimentacoes_historico
+
+            # ========================================
+            # VENDAS
+            # ========================================
+
+            caixa.total_vendas = len(vendas)
+
+            caixa.faturamento = sum(
+                (venda.total for venda in vendas),
+                Decimal('0.00')
+            )
+
+            # ========================================
+            # MOVIMENTAÇÕES
+            # ========================================
+
+            caixa.total_suprimentos = sum(
+                (
+                    movimentacao.valor
+                    for movimentacao in movimentacoes
+                    if movimentacao.tipo == MovimentacaoCaixa.Tipo.SUPRIMENTO
+                ),
+                Decimal('0.00')
+            )
+
+            caixa.total_sangrias = sum(
+                (
+                    movimentacao.valor
+                    for movimentacao in movimentacoes
+                    if movimentacao.tipo == MovimentacaoCaixa.Tipo.SANGRIA
+                ),
+                Decimal('0.00')
+            )
+
+            # ========================================
+            # SALDO ESPERADO
+            # ========================================
+
+            caixa.saldo_esperado = (
+                caixa.valor_inicial
+                + caixa.faturamento
+                + caixa.total_suprimentos
+                - caixa.total_sangrias
+            )
+
+            # ========================================
+            # SALDO FINAL
+            # ========================================
+
+            caixa.saldo_final = (
+                caixa.valor_final
+                or Decimal('0.00')
+            )
+
+            # ========================================
+            # DIFERENÇA
+            # ========================================
+
+            caixa.diferenca = (
+                caixa.saldo_final
+                - caixa.saldo_esperado
+            )
+
+            if caixa.diferenca > 0:
+
+                caixa.diferenca_tipo = 'positiva'
+
+            elif caixa.diferenca < 0:
+
+                caixa.diferenca_tipo = 'negativa'
+
+            else:
+
+                caixa.diferenca_tipo = 'zero'
+
+        return context
+      
 class SuprimentoCaixaView(LoginRequiredMixin, CreateView):
 
     model = MovimentacaoCaixa
