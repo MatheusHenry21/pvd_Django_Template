@@ -1,0 +1,110 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrar | PVDPro</title>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+<body>
+    <main class="login-page">
+        <section class="brand-panel">
+            <div class="brand">
+                <span class="brand-icon">▦</span>
+                <span>PVDPro</span>
+            </div>
+
+            <div class="brand-content">
+                <span class="eyebrow">GESTÃO COMERCIAL</span>
+                <h2>Controle seu caixa, suas vendas e seu estoque em um só lugar.</h2>
+                <p>Mais organização para o dia a dia do seu negócio.</p>
+            </div>
+
+            <div class="stats">
+                <div class="stat">
+                    <span>Vendas hoje</span>
+                    <strong>R$ {{ vendas_hoje|floatformat:"2g" }}</strong>
+                </div>
+
+                <div class="stat">
+                    <span>Produtos ativos</span>
+                    <strong>{{ produtos_ativos }}</strong>
+                </div>
+
+                <div class="stat">
+                    <span>Clientes</span>
+                    <strong>{{ total_clientes }}</strong>
+                </div>
+            </div>
+        </section>
+
+        <section class="form-panel">
+            <div class="login-box">
+                <div class="mobile-brand">
+                    <span class="brand-icon">▦</span>
+                    <span>PVDPro</span>
+                </div>
+
+                <h1>Entrar no sistema</h1>
+                <p class="subtitle">Use suas credenciais para acessar o PDV.</p>
+
+                <form method="post" class="login-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ next }}">
+
+                    {% if form.non_field_errors %}
+                        <div class="error-message">
+                            {{ form.non_field_errors }}
+                        </div>
+                    {% endif %}
+
+                    <div class="field">
+                        <label for="{{ form.username.id_for_label }}">Usuário</label>
+                        {{ form.username }}
+                        {{ form.username.errors }}
+                    </div>
+
+                    <div class="field">
+                        <label for="{{ form.password.id_for_label }}">Senha</label>
+                        <div class="password-wrapper">
+                            {{ form.password }}
+                            <button
+                                class="toggle-password"
+                                type="button"
+                                aria-label="Mostrar senha"
+                                aria-pressed="false"
+                            >
+                                Mostrar
+                            </button>
+                        </div>
+                        {{ form.password.errors }}
+                    </div>
+
+                    <button class="submit-button" type="submit">Entrar</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const passwordInput = document.querySelector(
+            '.password-wrapper input'
+        );
+        const toggleButton = document.querySelector('.toggle-password');
+
+        toggleButton.addEventListener('click', () => {
+            const showingPassword = passwordInput.type === 'text';
+
+            passwordInput.type = showingPassword ? 'password' : 'text';
+            toggleButton.textContent = showingPassword ? 'Mostrar' : 'Ocultar';
+            toggleButton.setAttribute('aria-pressed', String(!showingPassword));
+            toggleButton.setAttribute(
+                'aria-label',
+                showingPassword ? 'Mostrar senha' : 'Ocultar senha'
+            );
+        });
+    </script>
+</body>
+</html>

@@ -15,6 +15,21 @@
 
 {% block content %}
 
+{% for message in messages %}
+    <div style="
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 99999;
+        padding: 16px;
+        background: #dcfce7;
+        color: #166534;
+        border: 2px solid #16a34a;
+    ">
+        TESTE: {{ message }}
+    </div>
+{% endfor %}
+
 <link
     rel="stylesheet"
     href="{% static 'css/caixa.css' %}"

@@ -194,9 +194,7 @@ class AbrirCaixa(LoginRequiredMixin, CreateView):
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
-
         form.instance.usuario_abertura = self.request.user
-
         form.instance.status = Caixa.Status.ABERTO
 
         response = super().form_valid(form)
@@ -607,22 +605,42 @@ class SuprimentoCaixaView(LoginRequiredMixin, CreateView):
         return context
 
     def form_valid(self, form):
-
         form.instance.caixa = self.get_caixa()
         form.instance.usuario = self.request.user
         form.instance.tipo = MovimentacaoCaixa.Tipo.SUPRIMENTO
 
-        return super().form_valid(form)
+        response = super().form_valid(form)
+
+        valor_formatado = (
+            f'{self.object.valor:,.2f}'
+            .replace(',', 'X')
+            .replace('.', ',')
+            .replace('X', '.')
+        )
+
+        messages.success(
+            self.request,
+            f'Suprimento de R$ {valor_formatado} registrado.'
+        )
+
+        return response
+
+    def form_invalid(self, form):
+        if not self.request.POST.get('descricao', '').strip():
+            messages.error(
+                self.request,
+                'Informe o motivo do suprimento.'
+            )
+
+        return super().form_invalid(form)
 
 class SangriaCaixaView(LoginRequiredMixin, CreateView):
-
     model = MovimentacaoCaixa
     form_class = SangriaForm
     template_name = 'caixa/sangria.html'
     success_url = reverse_lazy('caixa:operacao')
 
     def dispatch(self, request, *args, **kwargs):
-
         self.caixa = Caixa.objects.filter(
             status=Caixa.Status.ABERTO
         ).first()
@@ -633,77 +651,144 @@ class SangriaCaixaView(LoginRequiredMixin, CreateView):
         return super().dispatch(request, *args, **kwargs)
 
     def get_saldo_atual(self):
-
         total_vendas = (
             self.caixa.vendas
-            .filter(
-                status=Venda.Status.FINALIZADA
-            )
-            .aggregate(
-                total=Sum('total')
-            )['total']
+            .filter(status=Venda.Status.FINALIZADA)
+            .aggregate(total=Sum('total'))['total']
             or Decimal('0.00')
         )
 
         total_suprimentos = (
             self.caixa.movimentacoes
-            .filter(
-                tipo=MovimentacaoCaixa.Tipo.SUPRIMENTO
-            )
-            .aggregate(
-                total=Sum('valor')
-            )['total']
+            .filter(tipo=MovimentacaoCaixa.Tipo.SUPRIMENTO)
+            .aggregate(total=Sum('valor'))['total']
             or Decimal('0.00')
         )
 
         total_sangrias = (
             self.caixa.movimentacoes
-            .filter(
-                tipo=MovimentacaoCaixa.Tipo.SANGRIA
-            )
-            .aggregate(
-                total=Sum('valor')
-            )['total']
+            .filter(tipo=MovimentacaoCaixa.Tipo.SANGRIA)
+            .aggregate(total=Sum('valor'))['total']
             or Decimal('0.00')
         )
 
-        saldo_atual = (
+        return (
             self.caixa.valor_inicial
             + total_vendas
             + total_suprimentos
             - total_sangrias
         )
 
-        return saldo_atual
-
     def get_context_data(self, **kwargs):
-
         context = super().get_context_data(**kwargs)
-
         context['caixa'] = self.caixa
         context['saldo_atual'] = self.get_saldo_atual()
-
         return context
 
     def form_valid(self, form):
-
         valor_sangria = form.cleaned_data['valor']
         saldo_atual = self.get_saldo_atual()
 
         if valor_sangria > saldo_atual:
-
             form.add_error(
                 'valor',
                 f'A sangria não pode ser maior que o saldo disponível de R$ {saldo_atual:.2f}.'
             )
-
             return self.form_invalid(form)
 
         form.instance.caixa = self.caixa
         form.instance.usuario = self.request.user
         form.instance.tipo = MovimentacaoCaixa.Tipo.SANGRIA
 
-        return super().form_valid(form)
+        response = super().form_valid(form)
+
+        valor_formatado = (
+            f'{self.object.valor:,.2f}'
+            .replace(',', 'X')
+            .replace('.', ',')
+            .replace('X', '.')
+        )
+
+        messages.success(
+            self.request,
+            f'Sangria de R$ {valor_formatado} registrada.'
+        )
+
+        return response
+
+class FecharCaixaView(LoginRequiredMixin, UpdateView):
+    model = Caixa
+    form_class = FechamentoCaixaForm
+    template_name = 'caixa/fechar.html'
+    success_url = reverse_lazy('caixa:operacao')
+
+    def get_object(self, queryset=None):
+        return (
+            Caixa.objects
+            .filter(status=Caixa.Status.ABERTO)
+            .order_by('-data_abertura')
+            .first()
+        )
+
+    def dispatch(self, request, *args, **kwargs):
+        if not self.get_object():
+            messages.error(
+                request,
+                'Não existe nenhum caixa aberto.'
+            )
+            return redirect('caixa:operacao')
+
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        caixa = self.object
+
+        total_vendas = (
+            caixa.vendas
+            .filter(status=Venda.Status.FINALIZADA)
+            .aggregate(total=Sum('total'))['total']
+            or Decimal('0.00')
+        )
+
+        total_suprimentos = (
+            caixa.movimentacoes
+            .filter(tipo=MovimentacaoCaixa.Tipo.SUPRIMENTO)
+            .aggregate(total=Sum('valor'))['total']
+            or Decimal('0.00')
+        )
+
+        total_sangrias = (
+            caixa.movimentacoes
+            .filter(tipo=MovimentacaoCaixa.Tipo.SANGRIA)
+            .aggregate(total=Sum('valor'))['total']
+            or Decimal('0.00')
+        )
+
+        saldo_esperado = (
+            caixa.valor_inicial
+            + total_vendas
+            + total_suprimentos
+            - total_sangrias
+        )
+
+        context['caixa'] = caixa
+        context['saldo_esperado'] = saldo_esperado
+        return context
+
+    def form_valid(self, form):
+        form.instance.usuario_fechamento = self.request.user
+        form.instance.data_fechamento = timezone.now()
+        form.instance.status = Caixa.Status.FECHADO
+
+        response = super().form_valid(form)
+
+        messages.success(
+            self.request,
+            'Caixa fechado com sucesso.'
+        )
+
+        return response
     
 class FecharCaixaView(LoginRequiredMixin, UpdateView):
 
@@ -808,18 +893,33 @@ class FecharCaixaView(LoginRequiredMixin, UpdateView):
         return context
 
     def form_valid(self, form):
+        valor_sangria = form.cleaned_data['valor']
+        saldo_atual = self.get_saldo_atual()
 
-        caixa = form.instance
+        if valor_sangria > saldo_atual:
+            form.add_error(
+                'valor',
+                f'A sangria não pode ser maior que o saldo disponível de R$ {saldo_atual:.2f}.'
+            )
 
-        caixa.usuario_fechamento = self.request.user
-        caixa.data_fechamento = timezone.now()
-        caixa.status = Caixa.Status.FECHADO
+            return self.form_invalid(form)
+
+        form.instance.caixa = self.caixa
+        form.instance.usuario = self.request.user
+        form.instance.tipo = MovimentacaoCaixa.Tipo.SANGRIA
 
         response = super().form_valid(form)
 
+        valor_formatado = (
+            f'{self.object.valor:,.2f}'
+            .replace(',', 'X')
+            .replace('.', ',')
+            .replace('X', '.')
+        )
+
         messages.success(
             self.request,
-            'Caixa fechado com sucesso.'
+            f'Sangria de R$ {valor_formatado} registrada.'
         )
 
         return response

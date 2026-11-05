@@ -25,6 +25,24 @@ class CaixaForm(forms.ModelForm):
             ),
         }
 
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+
+            self.fields['descricao'].required = True
+            self.fields['descricao'].error_messages['required'] = (
+                'Informe o motivo do suprimento.'
+            )
+
+        def clean_descricao(self):
+            descricao = self.cleaned_data.get('descricao', '').strip()
+
+            if not descricao:
+                raise forms.ValidationError(
+                    'Informe o motivo do suprimento.'
+                )
+
+            return descricao
+
 class MovimentacaoCaixaForm(forms.ModelForm):
 
     class Meta:

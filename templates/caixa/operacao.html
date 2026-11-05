@@ -15,7 +15,7 @@ Caixa
 
 {% block content %}
 
-<link rel="stylesheet" href="{% static 'css/caixa.css' %}">
+<link rel="stylesheet" href="{% static 'css/caixa.css' %}?v=2">
 
 
 <div class="caixa-container">
@@ -386,9 +386,68 @@ Caixa
 
         {% endif %}
 
-    
-        {% endif %}
+    </section>
+
+    {% else %}
+
+    <!-- CAIXA FECHADO -->
+
+    <section class="caixa-card">
+
+        <div class="caixa-info">
+
+            <div class="caixa-icon">
+                ▣
+            </div>
+
+            <div class="caixa-details">
+
+                <div class="caixa-title">
+
+                    <h2>Caixa Fechado</h2>
+
+                    <span class="caixa-status caixa-status-inativo">
+                        ● Inativo
+                    </span>
+
+                </div>
+
+                <p>Nenhum caixa aberto no momento.</p>
+
+            </div>
+
+        </div>
+
+        <a href="{% url 'caixa:abrir' %}" class="caixa-btn-primary">
+            Abrir Caixa
+        </a>
+
+    </section>
+
+    {% endif %}
 
 </div>
+
+{% if messages %}
+<div class="caixa-notificacoes">
+    {% for message in messages %}
+    <div class="caixa-notificacao {{ message.tags }}" role="status">
+        <span class="caixa-notificacao-icone" aria-hidden="true">
+            {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+            ✓
+            {% else %}
+            !
+            {% endif %}
+        </span>
+
+        <span>{{ message }}</span>
+
+        <a href="{% url 'caixa:operacao' %}" class="caixa-notificacao-fechar" aria-label="Dispensar notificação">
+            &times;
+        </a>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
 
 {% endblock %}

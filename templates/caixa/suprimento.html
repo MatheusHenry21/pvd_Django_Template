@@ -57,6 +57,7 @@
         <form
             method="post"
             action="{% url 'caixa:suprimento' %}"
+            novalidate
         >
 
             {% csrf_token %}
@@ -161,3 +162,14 @@
 </div>
 
 {% endblock %}
+
+{% if messages %}
+    <div class="caixa-notificacoes">
+        {% for message in messages %}
+            <div class="caixa-notificacao {{ message.tags }}" role="alert">
+                <span class="caixa-notificacao-icone" aria-hidden="true">!</span>
+                <span>{{ message }}</span>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}

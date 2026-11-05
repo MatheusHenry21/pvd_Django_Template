@@ -4,21 +4,18 @@
 
 
 {% block title %}
-    Fechar Caixa | PVDPro
+Fechar Caixa | PVDPro
 {% endblock %}
 
 
 {% block page_title %}
-    Caixa
+Caixa
 {% endblock %}
 
 
 {% block content %}
 
-<link
-    rel="stylesheet"
-    href="{% static 'css/caixa.css' %}"
->
+<link rel="stylesheet" href="{% static 'css/caixa.css' %}">
 
 
 <div class="caixa-modal-overlay">
@@ -40,10 +37,7 @@
             </div>
 
 
-            <a
-                href="{% url 'caixa:operacao' %}"
-                class="caixa-modal-close"
-            >
+            <a href="{% url 'caixa:operacao' %}" class="caixa-modal-close">
                 ×
             </a>
 
@@ -54,10 +48,7 @@
              FORMULÁRIO
         ========================================= -->
 
-        <form
-            method="post"
-            class="caixa-modal-movimentacao"
-        >
+        <form method="post" class="caixa-modal-movimentacao">
 
             {% csrf_token %}
 
@@ -97,16 +88,24 @@
 
                 {% if form.valor_final.errors %}
 
-                    <div class="caixa-form-error">
+                <div class="caixa-form-error">
 
-                        {{ form.valor_final.errors }}
+                    {{ form.valor_final.errors }}
 
-                    </div>
+                </div>
 
                 {% endif %}
 
             </div>
 
+            <!-- DIFERENÇA -->
+
+            <div id="caixa-diferenca" class="caixa-diferenca" data-campo-id="{{ form.valor_final.id_for_label }}"
+                role="status" aria-live="polite" hidden>
+                <span>Diferença</span>
+
+                <strong id="caixa-diferenca-valor"></strong>
+            </div>
 
             <!-- OBSERVAÇÃO -->
 
@@ -124,11 +123,11 @@
 
                 {% if form.observacao_fechamento.errors %}
 
-                    <div class="caixa-form-error">
+                <div class="caixa-form-error">
 
-                        {{ form.observacao_fechamento.errors }}
+                    {{ form.observacao_fechamento.errors }}
 
-                    </div>
+                </div>
 
                 {% endif %}
 
@@ -141,18 +140,12 @@
 
             <div class="caixa-modal-actions">
 
-                <a
-                    href="{% url 'caixa:operacao' %}"
-                    class="caixa-btn-cancelar"
-                >
+                <a href="{% url 'caixa:operacao' %}" class="caixa-btn-cancelar">
                     Cancelar
                 </a>
 
 
-                <button
-                    type="submit"
-                    class="caixa-btn-confirmar-fechamento"
-                >
+                <button type="submit" name="acao" value="confirmar" class="caixa-btn-confirmar-fechamento">
                     Confirmar Fechamento
                 </button>
 
@@ -163,5 +156,9 @@
     </div>
 
 </div>
+
+{{ saldo_esperado|json_script:"caixa-saldo-esperado" }}
+
+<script src="{% static 'js/caixa-fechamento.js' %}" defer></script>
 
 {% endblock %}

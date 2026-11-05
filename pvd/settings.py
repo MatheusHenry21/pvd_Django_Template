@@ -42,9 +42,14 @@ INSTALLED_APPS = [
     'caixa',
     'produtos',
     'vendas',
+    'clientes',
 ]
 
 AUTH_USER_MODEL = 'usuarios.Usuario'
+
+LOGIN_URL = 'usuarios:login'
+LOGIN_REDIRECT_URL = 'caixa:operacao'
+LOGOUT_REDIRECT_URL = 'usuarios:login'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
